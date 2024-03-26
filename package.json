@@ -1,0 +1,15 @@
+{
+  "name": "link-sharing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "app/server"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@moonrepo/cli": "^1.22.10"
+  }
+}

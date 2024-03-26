@@ -1,0 +1,11 @@
+**/node_modules
+package-lock.json
+.env
+# moon
+.moon/cache
+.moon/docker
+
+.DS_Store
+# moon
+.moon/cache
+.moon/docker

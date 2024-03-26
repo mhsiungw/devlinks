@@ -1,0 +1,13 @@
+type: 'application'
+language: 'nodejs'
+
+tasks:
+  dev:
+    command:
+      - 'nodemon'
+      - './bin/www'
+
+  db:
+    command:
+      - 'node'
+      - './db/init-db'
