@@ -5,9 +5,9 @@ tasks:
   dev:
     command:
       - 'nodemon'
-      - './bin/www'
+      - './bin/www.js'
 
-  db:
+  seed:
     command:
       - 'node'
-      - './db/init-db'
+      - './bin/db/seed.js'

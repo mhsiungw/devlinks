@@ -6,8 +6,6 @@ const pool = new pg.Pool({
 	password: process.env.POSTGRES_PASSWORD,
 	port: process.env.PGPORT,
 })
-
-
  
 const query = (text, params, callback) => {
   return pool.query(text, params, callback)
