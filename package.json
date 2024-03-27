@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "workspaces": [
-    "app/server"
+    "app/server",
+    "app/client"
   ],
   "keywords": [],
   "author": "",
@@ -13,10 +14,15 @@
     "@moonrepo/cli": "1.22.10",
     "eslint": "8.57.0",
     "eslint-config-airbnb": "19.0.4",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.29.1",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.29.1",
     "eslint-plugin-jsx-a11y": "6.8.0",
     "eslint-plugin-react": "7.34.1",
-    "eslint-plugin-react-hooks": "4.6.0"
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-config-next": "14.1.4"
+  },
+  "packageManager": "npm@10.1.0",
+  "engines": {
+    "node": "20.9.0"
   }
 }
