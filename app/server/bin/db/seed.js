@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import 'dotenv/config'
+import 'dotenv/config.js';
 
-import pg from 'pg'
-import user from './seeds/users.js'
+import pg from 'pg';
+import user from './seeds/users.js';
 
 async function initDb() {
 	const client = new pg.Client({
@@ -11,11 +11,11 @@ async function initDb() {
 		user: process.env.PGUSER,
 		password: process.env.POSTGRES_PASSWORD,
 		port: process.env.PGPORT,
-	})
+	});
 
-	client.connect()
+	client.connect();
 
-	await client.query(`DROP TABLE IF EXISTS users;`)
+	await client.query('DROP TABLE IF EXISTS users;');
 
 	await client.query(
 		`
@@ -26,10 +26,10 @@ async function initDb() {
 				password VARCHAR (255) NOT NULL,
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			);
-		`
-	)
+		`,
+	);
 
-	const queries = []
+	const queries = [];
 
 	user.forEach(({ email, password }) => {
 		queries.push(
@@ -37,14 +37,14 @@ async function initDb() {
 				`
 				INSERT INTO users (email, password) VALUES ($1, $2)
 			`,
-				[email, password]
-			)
-		)
-	})
+				[email, password],
+			),
+		);
+	});
 
-	await Promise.allSettled(queries)
+	await Promise.allSettled(queries);
 
-	client.end()
+	client.end();
 }
 
-initDb()
+initDb();

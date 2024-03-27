@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 export default [
 	{
@@ -8,5 +8,5 @@ export default [
 	{
 		email: 'thepb@gasss.net',
 		password: bcrypt.hashSync('123456', 10),
-	}
-]
+	},
+];

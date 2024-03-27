@@ -1,0 +1,10 @@
+tasks:
+  lint:
+    command:
+      - 'eslint'
+      - '.'
+  format:
+    command:
+      - 'eslint'
+      - '--fix'
+      - '.'
