@@ -4,6 +4,7 @@ language: 'nodejs'
 tasks:
   dev:
     command:
+      - 'DEBUG="development:*"'
       - 'nodemon'
       - './bin/www.js'
 

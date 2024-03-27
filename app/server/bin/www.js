@@ -6,9 +6,11 @@ import 'dotenv/config.js';
  * Module dependencies.
  */
 
-import debug from 'debug';
+import _debug from 'debug';
 import http from 'http';
 import app from '../app.js';
+
+const debug = _debug('development:www');
 
 /**
  * Get port from environment and store in Express.
@@ -70,11 +72,11 @@ function onError(error) {
 	// handle specific listen errors with friendly messages
 	switch (error.code) {
 	case 'EACCES':
-		console.error(`${bind} requires elevated privileges`);
+		debug(`${bind} requires elevated privileges`);
 		process.exit(1);
 		break;
 	case 'EADDRINUSE':
-		console.error(`${bind} is already in use`);
+		debug(`${bind} is already in use`);
 		process.exit(1);
 		break;
 	default:
@@ -89,5 +91,6 @@ function onError(error) {
 function onListening() {
 	const addr = server.address();
 	const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+	// console.log(`Listening on ${bind}`)
 	debug(`Listening on ${bind}`);
 }
