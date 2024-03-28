@@ -3,6 +3,10 @@
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
+	"scripts": {
+		"dev": "DEBUG=development:* nodemon ./bin/www",
+		"seed": "node ./bin/db/seed"
+	},
 	"dependencies": {
 		"bcrypt": "5.1.1",
 		"cookie-parser": "1.4.6",
