@@ -9,9 +9,9 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    links:
+    depends_on:
       - db
-    command: "moon r server:dev"
+    command: "npm run dev -w server"
   db:
     container_name: database
     image: "postgres:latest"
@@ -34,7 +34,7 @@ services:
       - /app/node_modules
     links:
       - server
-    command: "moon r client:dev"
+    command: "npm run dev -w client"
 
 volumes:
   db:
