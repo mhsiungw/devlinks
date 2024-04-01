@@ -1,4 +1,5 @@
 import createError from 'http-errors';
+import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import logger from 'morgan';
@@ -8,6 +9,7 @@ import router from './routes/v1/index.js';
 
 const app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,18 +24,15 @@ app.use(passport.authenticate('session'));
 
 app.use('/api/v1', router);
 
-// TODO: delelete after figuring out redirec logic
-app.get('/', (req, res) => {
-	res.json({ result: 'ok' });
-});
-
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
 	next(createError(404));
 });
 
 // error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
+	console.log('----global error handler----');
+
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
