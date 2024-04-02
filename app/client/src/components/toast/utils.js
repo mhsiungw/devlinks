@@ -1,5 +1,5 @@
 import {
-	toast, Slide,
+	toast, Slide
 } from 'react-toastify';
 
 export const defaultToastOptions = {
@@ -10,13 +10,13 @@ export const defaultToastOptions = {
 	pauseOnHover: true,
 	draggable: true,
 	theme: 'colored',
-	transition: Slide,
+	transition: Slide
 };
 
 export const showToast = (
 	type,
 	content,
-	options,
+	options
 ) => {
 	const optionsToApply = { ...defaultToastOptions, ...options };
 

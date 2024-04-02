@@ -3,7 +3,7 @@ export default function Input({
 	name,
 	Icon,
 	type,
-	placeholder,
+	placeholder
 }) {
 	return (
 		<div>

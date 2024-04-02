@@ -9,17 +9,17 @@ const router = Router();
 passport.use(
 	new LocalStrategy(
 		{
-			usernameField: 'email',
+			usernameField: 'email'
 		},
 		async (email, password, cb) => {
 			try {
 				const { rows } = await db.query(
 					'SELECT * FROM users WHERE email = $1',
-					[email],
+					[email]
 				);
 				if (!rows.length) {
 					cb(null, false, {
-						message: 'Incorrect username or password.',
+						message: 'Incorrect username or password.'
 					});
 				}
 
@@ -29,14 +29,14 @@ passport.use(
 					cb(null, { id, email });
 				} else {
 					cb(null, false, {
-						message: 'Incorrect username or password.',
+						message: 'Incorrect username or password.'
 					});
 				}
 			} catch (err) {
 				cb(err);
 			}
-		},
-	),
+		}
+	)
 );
 
 passport.serializeUser((user, cb) => {
@@ -55,7 +55,7 @@ router.post(
 	'/login/password',
 	passport.authenticate('local', {
 		failureMessage: true,
-		failWithError: true,
+		failWithError: true
 	}),
 	(req, res) => {
 		// handle success
@@ -65,11 +65,11 @@ router.post(
 	(err, req, res, next) => {
 		// Handle error
 		res.status(401).json({ message: req.session.messages[0] });
-	},
+	}
 );
 
 router.get('/logout', (req, res, next) => {
-	req.logout((err) => {
+	req.logout(err => {
 		if (err) {
 			return next(err);
 		}
@@ -85,7 +85,7 @@ router.post('/signup', async (req, res, next) => {
 
 		await db.query('INSERT INTO users (email, password) VALUES ($1, $2)', [
 			email,
-			hashedPassword,
+			hashedPassword
 		]);
 
 		res.json({ message: 'ok' });

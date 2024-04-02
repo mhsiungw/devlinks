@@ -10,7 +10,7 @@ export default function ToastProvider({ children }) {
 		info: 'bg-gray-600',
 		warning: 'bg-orange-400',
 		default: 'bg-purple',
-		dark: 'bg-white-600 font-gray-300',
+		dark: 'bg-white-600 font-gray-300'
 	};
 
 	return (

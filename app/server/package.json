@@ -5,7 +5,9 @@
 	"type": "module",
 	"scripts": {
 		"dev": "DEBUG=development:* nodemon ./bin/www",
-		"seed": "node ./bin/db/seed"
+		"seed": "node ./bin/db/seed",
+		"lint": "eslint .",
+		"format": "eslint --fix ."
 	},
 	"dependencies": {
 		"bcrypt": "5.1.1",

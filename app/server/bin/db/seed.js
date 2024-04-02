@@ -10,7 +10,7 @@ async function initDb() {
 		host: process.env.PGHOST,
 		user: process.env.PGUSER,
 		password: process.env.POSTGRES_PASSWORD,
-		port: process.env.PGPORT,
+		port: process.env.PGPORT
 	});
 
 	client.connect();
@@ -26,7 +26,7 @@ async function initDb() {
 				password VARCHAR (255) NOT NULL,
 				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 			);
-		`,
+		`
 	);
 
 	const queries = [];
@@ -37,8 +37,8 @@ async function initDb() {
 				`
 				INSERT INTO users (email, password) VALUES ($1, $2)
 			`,
-				[email, password],
-			),
+				[email, password]
+			)
 		);
 	});
 

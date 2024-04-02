@@ -3,9 +3,9 @@ module.exports = {
 		'import/extensions': [
 			'error',
 			{
-				js: 'always',
-			},
+				js: 'always'
+			}
 		],
-		'consistent-return': 'off',
-	},
+		'consistent-return': 'off'
+	}
 };

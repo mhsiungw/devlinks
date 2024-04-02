@@ -3,7 +3,7 @@ module.exports = {
 	content: [
 		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
 		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
-		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/app/**/*.{js,ts,jsx,tsx,mdx}'
 	],
 	theme: {
 		extend: {
@@ -12,9 +12,9 @@ module.exports = {
 				gray: '#737373',
 				purple: '#633CFF',
 				white: '#fff',
-				border: '#D9D9D9',
-			},
-		},
+				border: '#D9D9D9'
+			}
+		}
 	},
-	plugins: [],
+	plugins: []
 };

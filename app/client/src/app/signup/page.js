@@ -17,11 +17,11 @@ const Schema = (
 		.object({
 			email: z.string().email(),
 			password: z.string().min(6),
-			confirmPassword: z.string().min(6),
+			confirmPassword: z.string().min(6)
 		})
 		.refine(({ password, confirmPassword }) => password === confirmPassword, {
 			message: "Passwords don't match",
-			path: ['confirmPassword'],
+			path: ['confirmPassword']
 		})
 );
 
@@ -30,8 +30,8 @@ function signup(data) {
 		method: 'POST',
 		body: JSON.stringify(data),
 		headers: {
-			'Content-Type': 'application/json',
-		},
+			'Content-Type': 'application/json'
+		}
 	});
 }
 
@@ -43,7 +43,7 @@ export default function Register() {
 			const result = await response.json();
 
 			showToast(null, result.message);
-		},
+		}
 	});
 
 	return (
@@ -95,6 +95,9 @@ export default function Register() {
 						</span>
 						<Link className='text-purple' href='/login'>
 							Login
+						</Link>
+						<Link className='text-purple' href='/'>
+							Root
 						</Link>
 					</div>
 				</div>

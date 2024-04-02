@@ -1,3 +1,10 @@
 {
-	"eslint.workingDirectories": ["app/client", "app/server"]
+	"eslint.workingDirectories": ["app/client", "app/server"],
+	"prettier.semi": true,
+	"editor.formatOnSave": true,
+	"prettier.arrowParens": "avoid",
+	"prettier.trailingComma": "none",
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "always"
+	}
 }
