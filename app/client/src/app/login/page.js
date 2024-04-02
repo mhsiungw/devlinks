@@ -1,42 +1,8 @@
-'use client';
-
 import Link from 'next/link';
-import { z } from 'zod';
-import { useZorm } from 'react-zorm';
 import LogoDevlinksLarge from '@/images/logo-devlinks-large.svg';
-import IconEmail from '@/images/icon-email.svg';
-import IconPassword from '@/images/icon-password.svg';
-import Form from '@/components/form';
-import Input from '@/components/input';
-import Button from '@/components/button';
-import { showToast } from '@/components/toast/utils';
-
-const Schema = z.object({
-	email: z.string().email(),
-	password: z.string(),
-});
-
-function signin(data) {
-	return fetch('http://localhost:3000/api/v1/auth/login/password', {
-		method: 'POST',
-		body: JSON.stringify(data),
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
-}
+import LoginForm from '@/app/login/login-form';
 
 export default function Login() {
-	const zo = useZorm('register', Schema, {
-		onValidSubmit: async e => {
-			e.preventDefault();
-			const response = await signin(e.data);
-			const result = await response.json();
-
-			showToast(null, result.message);
-		},
-	});
-
 	return (
 		<div className='flex justify-center items-center h-full'>
 			<div className='w-1/3 min-w-[425px]'>
@@ -52,26 +18,10 @@ export default function Login() {
 							Add your details below to get back into the app
 						</div>
 					</div>
-					<Form ref={zo.ref}>
-						<Input
-							label='Email address'
-							name={zo.fields.email()}
-							type='email'
-							Icon={IconEmail}
-							placeholder='e.g. alex@email.com'
-						/>
-						<Input
-							label='Password'
-							name={zo.fields.password()}
-							Icon={IconPassword}
-							placeholder='Enter your password'
-							type='password'
-						/>
-						<Button type='submit'>Login</Button>
-					</Form>
+					<LoginForm />
 					<div className='text-base mt-6 flex justify-center'>
 						<span className='text-gray mr-1'>
-							{"Don't"} have an account?
+							Don&apos; have an account?
 						</span>
 						<Link className='text-purple' href='/signup'>
 							Create account

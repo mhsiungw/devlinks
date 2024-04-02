@@ -9,16 +9,30 @@ import router from './routes/v1/index.js';
 
 const app = express();
 
-app.use(cors());
+app.use(
+	cors({
+		origin: 'http://localhost:3001',
+		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+		credentials: true
+	})
+);
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(session({
-	secret: process.env.SECRET,
-	resave: false, // don't save session if unmodified
-	saveUninitialized: false, // don't create session until something stored
-	// store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' })
-}));
+app.use(
+	session({
+		secret: process.env.SECRET,
+		resave: false, // don't save session if unmodified
+		saveUninitialized: false, // don't create session until something stored
+		// store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' })
+		cookie: {
+			sameSite: false,
+			secure: false,
+			maxAge: 1000,
+			httpOnly: true
+		}
+	})
+);
 
 app.use(passport.authenticate('session'));
 
@@ -30,9 +44,8 @@ app.use((req, res, next) => {
 });
 
 // error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-	console.log('----global error handler----');
-
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
