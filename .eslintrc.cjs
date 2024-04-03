@@ -26,6 +26,7 @@ module.exports = {
 		'arrow-parens': ['error', 'as-needed'],
 		'no-tabs': 'off',
 		'no-use-before-define': ['error', { functions: false }],
-		'comma-dangle': ['error', 'never']
+		'comma-dangle': ['error', 'never'],
+		'object-curly-newline': 'off'
 	}
 };
