@@ -1,55 +1,9 @@
 import { Router } from 'express';
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
 import bcrypt from 'bcrypt';
 import db from '../../db/index.js';
 
 const router = Router();
-
-passport.use(
-	new LocalStrategy(
-		{
-			usernameField: 'email'
-		},
-		async (email, password, cb) => {
-			try {
-				const { rows } = await db.query(
-					'SELECT * FROM users WHERE email = $1',
-					[email]
-				);
-				if (!rows.length) {
-					cb(null, false, {
-						message: 'Incorrect username or password.'
-					});
-				}
-
-				const { id, password: hashPassword } = rows[0];
-
-				if (await bcrypt.compare(password, hashPassword)) {
-					cb(null, { id, email });
-				} else {
-					cb(null, false, {
-						message: 'Incorrect username or password.'
-					});
-				}
-			} catch (err) {
-				cb(err);
-			}
-		}
-	)
-);
-
-passport.serializeUser((user, cb) => {
-	process.nextTick(() => {
-		cb(null, { id: user.id, email: user.email });
-	});
-});
-
-passport.deserializeUser((user, cb) => {
-	process.nextTick(() => {
-		cb(null, user);
-	});
-});
 
 router.post(
 	'/login/password',

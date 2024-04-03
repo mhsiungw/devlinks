@@ -1,11 +1,13 @@
-import createError from 'http-errors';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import logger from 'morgan';
-import passport from 'passport';
 
 import router from './routes/v1/index.js';
+
+// services
+import passport from './services/passport/index.js';
+import errorHandler from './services/error-handler/index.js';
 
 const app = express();
 
@@ -28,31 +30,20 @@ app.use(
 		cookie: {
 			sameSite: false,
 			secure: false,
-			maxAge: 1000,
+			maxAge: 200000,
 			httpOnly: true
 		}
 	})
 );
 
-app.use(passport.authenticate('session'));
+passport(app);
 
 app.use('/api/v1', router);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-	next(createError(404));
+app.get('/', (req, res) => {
+	res.json({ message: 'from root' });
 });
 
-// error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-	// render the error page
-	res.status(err.status || 500);
-	res.json({ err });
-});
+errorHandler(app);
 
 export default app;
