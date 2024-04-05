@@ -22,7 +22,7 @@ module.exports = {
 		sourceType: 'module'
 	},
 	rules: {
-		indent: ['error', 'tab'],
+		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'arrow-parens': ['error', 'as-needed'],
 		'no-tabs': 'off',
 		'no-use-before-define': ['error', { functions: false }],
