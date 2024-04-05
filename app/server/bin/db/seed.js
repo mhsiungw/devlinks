@@ -55,10 +55,7 @@ async function initDb() {
 					user_id INT REFERENCES users(id) ON DELETE CASCADE,
 					name VARCHAR( 255 ) NOT NULL,
 					email VARCHAR ( 255 ) NOT NULL,
-					links JSONB,
-					CONSTRAINT check_links_structure CHECK (
-						jsonb_typeof(links) = 'object'
-					)
+					links JSONB
 				)
 			`
 		);
@@ -78,7 +75,7 @@ async function initDb() {
 
 		await Promise.allSettled(profileQueries);
 
-		pool.end();
+		await pool.end();
 	} catch (err) {
 		// eslint-disable-next-line no-console
 		console.log('err', err);

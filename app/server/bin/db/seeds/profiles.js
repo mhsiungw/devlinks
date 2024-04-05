@@ -11,8 +11,22 @@ export default [
 		userId: 1,
 		name: 'Test Wang',
 		email: '123@example.com',
-		links: {
-			github: 'http://123'
-		}
+		links: [
+			{
+				id: 1,
+				type: 'github',
+				url: 'http://github'
+			},
+			{
+				id: 2,
+				type: 'facebook',
+				url: 'http://facebook'
+			},
+			{
+				id: 3,
+				type: 'linkedin',
+				url: 'http://linkedin'
+			}
+		]
 	}
 ];
