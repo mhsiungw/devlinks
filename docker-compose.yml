@@ -1,41 +1,41 @@
 version: '3'
 services:
-  server:
-    container_name: server
-    build: .
-    image: app_image
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - db
-    command: "npm run dev -w server"
-  db:
-    container_name: database
-    image: "postgres:latest"
-    restart: on-failure
-    environment:
-      - POSTGRES_PASSWORD=password
-      - PGUSER=postgres
-    volumes: 
-      - db:/var/lib/postgresql/data
+    server:
+        container_name: server
+        build: .
+        image: app_image
+        ports:
+            - '3000:3000'
+        volumes:
+            - .:/app
+            - /app/node_modules
+        depends_on:
+            - db
+        command: 'npm run dev -w server && npm run seed -w server'
+    db:
+        container_name: database
+        image: 'postgres:latest'
+        restart: on-failure
+        environment:
+            - POSTGRES_PASSWORD=password
+            - PGUSER=postgres
+        volumes:
+            - db:/var/lib/postgresql/data
 
-  client:
-    container_name: client
-    image: app_image
-    depends_on:
-      - server
-    ports:
-      - "3001:3001"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    links:
-      - server
-    command: "npm run dev -w client"
+    client:
+        container_name: client
+        image: app_image
+        depends_on:
+            - server
+        ports:
+            - '3001:3001'
+        volumes:
+            - .:/app
+            - /app/node_modules
+        links:
+            - server
+        command: 'npm run dev -w client'
 
 volumes:
-  db:
-    driver: local
+    db:
+        driver: local
