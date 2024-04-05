@@ -31,14 +31,20 @@ async function initDb() {
 		`
 		);
 
+		const usersQueries = [];
+
 		users.forEach(({ email, password }) => {
-			pool.query(
-				`
+			usersQueries.push(
+				pool.query(
+					`
 					INSERT INTO users (email, password) VALUES ($1, $2)
 				`,
-				[email, password]
+					[email, password]
+				)
 			);
 		});
+
+		await Promise.allSettled(usersQueries);
 
 		// profiles
 		await pool.query(
@@ -57,14 +63,20 @@ async function initDb() {
 			`
 		);
 
+		const profileQueries = [];
+
 		profiles.forEach(({ userId, name, email, links }) => {
-			pool.query(
-				`
+			profileQueries.push(
+				pool.query(
+					`
 					INSERT INTO profiles (user_id, name, email, links) VALUES ($1, $2, $3, $4)
 				`,
-				[userId, name, email, JSON.stringify(links)]
+					[userId, name, email, JSON.stringify(links)]
+				)
 			);
 		});
+
+		await Promise.allSettled(profileQueries);
 
 		pool.end();
 	} catch (err) {
