@@ -2,7 +2,7 @@ import Link from 'next/link';
 import LogoDevlinksLarge from '@/images/logo-devlinks-large.svg';
 import LoginForm from '@/app/login/login-form';
 
-export default function Login() {
+export default async function Login() {
 	return (
 		<div className='flex justify-center items-center h-full'>
 			<div className='w-1/3 min-w-[425px]'>
@@ -14,7 +14,7 @@ export default function Login() {
 						<h2 className='text-dark-gray text-3xl font-bold mb-2'>
 							Login
 						</h2>
-						<div className='text-gray text-base'>
+						<div className='text-grey text-base'>
 							Add your details below to get back into the app
 						</div>
 					</div>
