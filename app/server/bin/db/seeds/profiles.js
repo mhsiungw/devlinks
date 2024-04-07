@@ -1,29 +1,21 @@
-// id SERIAL PRIMARY KEY,
-// user_id INT REFERENCES users(id) ON DELETE CASCADE,
-// name VARCHAR( 255 ) NOT NULL,
-// email VARCHAR ( 255 ) NOT NULL,
-// links JSONB
-// CONSTRAINT check_links_structure CHECK (
-// 	jsonb_typeof(links) = 'object'
-// );
 export default [
 	{
 		userId: 1,
-		name: 'Test Wang',
+		firstName: 'Test',
+		lastName: 'Wang',
 		email: '123@example.com',
+		avatarUrl:
+			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR71GG89SFZckJ46zA_Ljrj6xsyJgU6g_zrBu4mNUo6Jg&s',
 		links: [
 			{
-				id: 1,
 				type: 'github',
 				url: 'http://github'
 			},
 			{
-				id: 2,
 				type: 'facebook',
 				url: 'http://facebook'
 			},
 			{
-				id: 3,
 				type: 'linkedin',
 				url: 'http://linkedin'
 			}

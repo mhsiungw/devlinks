@@ -7,6 +7,6 @@ import profile from './profile.js';
 const router = Router();
 
 router.use('/auth/', auth);
-router.use('/profile', protect, profile);
-
+// router.use('/profile', protect, profile);
+router.use('/profile', profile);
 export default router;

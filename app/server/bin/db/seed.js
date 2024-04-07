@@ -51,27 +51,39 @@ async function initDb() {
 			`
 				CREATE TABLE IF NOT EXISTS profiles
 				(
-					id SERIAL PRIMARY KEY,
+					profile_id SERIAL PRIMARY KEY,
 					user_id INT REFERENCES users(id) ON DELETE CASCADE,
-					name VARCHAR( 255 ) NOT NULL,
+					first_name VARCHAR( 255 ) NOT NULL,
+					last_name VARCHAR( 255 ) NOT NULL,
 					email VARCHAR ( 255 ) NOT NULL,
-					links JSONB
+					avatar_url TEXT,
+					links JSONB,
+					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 				)
 			`
 		);
 
 		const profileQueries = [];
 
-		profiles.forEach(({ userId, name, email, links }) => {
-			profileQueries.push(
-				pool.query(
-					`
-					INSERT INTO profiles (user_id, name, email, links) VALUES ($1, $2, $3, $4)
+		profiles.forEach(
+			({ userId, firstName, lastName, email, avatarUrl, links }) => {
+				profileQueries.push(
+					pool.query(
+						`
+					INSERT INTO profiles (user_id, first_name, last_name, email, avatar_url, links) VALUES ($1, $2, $3, $4, $5, $6)
 				`,
-					[userId, name, email, JSON.stringify(links)]
-				)
-			);
-		});
+						[
+							userId,
+							firstName,
+							lastName,
+							email,
+							avatarUrl,
+							JSON.stringify(links)
+						]
+					)
+				);
+			}
+		);
 
 		await Promise.allSettled(profileQueries);
 
