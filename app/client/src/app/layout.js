@@ -1,6 +1,7 @@
 // eslint-disable-next-line camelcase
 import { Instrument_Sans } from 'next/font/google';
 import ToastProvider from '@/components/toast';
+import StoreProvider from './StoreProvider';
 import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang='en'>
 			<body className={inter.className}>
-				<ToastProvider>{children}</ToastProvider>
+				<StoreProvider>
+					<ToastProvider>{children}</ToastProvider>
+				</StoreProvider>
 			</body>
 		</html>
 	);
