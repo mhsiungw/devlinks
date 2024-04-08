@@ -1,24 +1,34 @@
 export default function Input({
 	label,
 	name,
+	defaultValue,
 	Icon,
 	type,
 	placeholder
 }) {
-	return (
-		<div>
-			<label htmlFor={label} className='text-xs mb-[2px] text-dark-gray'>
+	const renderLabel = () => {
+		if (!label) {
+			return null;
+		}
+
+		return (
+			<label htmlFor={name} className='text-xs mb-[2px] text-dark-gray'>
 				{label}
 			</label>
-			<div className='flex items-center [&:has(input:focus)]:border-purple border border-border rounded-lg'>
-				<div className='m-4'>
-					<Icon />
-				</div>
+		);
+	};
+
+	return (
+		<div>
+			{renderLabel()}
+			<div className='flex items-center [&:has(input:focus)]:border-purple border border-border rounded-lg p-3 gap-2'>
+				{Icon && <Icon />}
 				<input
-					className='outline-none w-full'
-					id={label}
+					className='outline-none w-full bg-transparent'
+					id={name}
 					name={name}
 					type={type}
+					defaultValue={defaultValue}
 					placeholder={placeholder}
 				/>
 			</div>
