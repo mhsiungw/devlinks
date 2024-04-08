@@ -1,3 +1,5 @@
+import path from 'path';
+import { URL } from 'node:url';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
@@ -22,6 +24,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
+	'/static',
+	express.static(path.join(new URL('.', import.meta.url).pathname, 'public'))
+);
+app.use(
 	session({
 		secret: process.env.SECRET,
 		resave: false, // don't save session if unmodified
@@ -29,7 +35,7 @@ app.use(
 		// store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' })
 		cookie: {
 			sameSite: false,
-			secure: false,
+			secure: false, // TODO: set to true when using https
 			maxAge: 200000,
 			httpOnly: true
 		}

@@ -22,7 +22,7 @@ router.get('/:profileId', async (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
-	const userId = req?.user?.id || 3;
+	const userId = req?.user?.id;
 	const { name, email, links } = req.body;
 
 	try {
@@ -37,7 +37,7 @@ router.post('/', async (req, res, next) => {
 });
 
 router.put('/:profileId', async (req, res, next) => {
-	const userId = req?.user?.id || 1;
+	const userId = req?.user?.id;
 	const { profileId } = req.params;
 
 	try {
@@ -52,9 +52,7 @@ router.put('/:profileId', async (req, res, next) => {
 
 		const { firstName, lastName, email, links } = req.body;
 
-		console.log(firstName, lastName, email, links, profileId);
-
-		const result = await db.query(
+		await db.query(
 			`
 				UPDATE profiles
 				SET 
@@ -66,9 +64,6 @@ router.put('/:profileId', async (req, res, next) => {
 			`,
 			[firstName, lastName, email, JSON.stringify(links), profileId]
 		);
-
-		console.log('resultresultresultresult', result);
-
 		res.json({ message: 'ok' });
 	} catch (err) {
 		next(err);

@@ -8,7 +8,6 @@ export default app => {
 
 	passport.serializeUser((user, cb) => {
 		process.nextTick(() => {
-			console.log('serializeUser');
 			cb(null, { id: user.id, email: user.email });
 		});
 	});

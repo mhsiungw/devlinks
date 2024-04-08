@@ -4,8 +4,7 @@ export default [
 		firstName: 'Test',
 		lastName: 'Wang',
 		email: '123@example.com',
-		avatarUrl:
-			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR71GG89SFZckJ46zA_Ljrj6xsyJgU6g_zrBu4mNUo6Jg&s',
+		avatarUrl: 'http://server:3000/static/images/11.jpg',
 		links: [
 			{
 				type: 'github',
