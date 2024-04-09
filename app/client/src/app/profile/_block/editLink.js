@@ -48,6 +48,7 @@ export default function EditLinkBlock({ links = [], onChange }) {
 	);
 
 	const renderForm = useCallback(
+		// TODO: fix duplicate id
 		({ type, url }, index) => (
 			<LinkForm
 				key={type}

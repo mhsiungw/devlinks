@@ -2,8 +2,8 @@ import 'server-only';
 import { cookies } from 'next/headers';
 import ProfileEditBlock from '@/app/profile/_block';
 
-export default async function ProfileEdit({ params }) {
-	const { profileId } = params;
+export default async function ProfileEdit(props) {
+	const { profileId } = props.params;
 
 	const res = await fetch(`${process.env.APP_API_URL}/profile/${profileId}`, {
 		method: 'GET',

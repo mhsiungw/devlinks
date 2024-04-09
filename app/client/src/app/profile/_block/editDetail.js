@@ -2,7 +2,7 @@ import Input from '@/components/input';
 import IconUploadImage from '@/images/icon-upload-image.svg';
 
 export default function EditDetail({ profile }) {
-	const { email, firstName, lastName } = profile;
+	const { avatarUrl, email, firstName, lastName } = profile;
 
 	return (
 		<>
@@ -21,17 +21,41 @@ export default function EditDetail({ profile }) {
 						<div className='flex items-center flex-1'>
 							<div>
 								<label
-									className='w-48 h-48 px-10 py-14 bg-light-purple flex flex-col items-center justify-end cursor-pointer'
-									htmlFor='fileInput'
+									className={`w-48 h-48 px-10 py-14 bg-light-purple flex flex-col items-center justify-end cursor-pointer`}
+									// TODO: fix image re-rerender on typeing
+									style={{
+										backgroundImage: `
+										linear-gradient(
+											rgba(0, 0, 0, 0.4), 
+											rgba(0, 0, 0, 0.4)
+										),
+										url("${avatarUrl.replace('server', 'localhost')}")`,
+										backgroundSize: 'cover',
+										backgroundPosition: 'center'
+									}}
+									htmlFor='avatarFile'
 								>
-									<IconUploadImage />{' '}
-									<div className='whitespace-nowrap text-purple font-bold'>
+									<IconUploadImage
+										className={`${
+											avatarUrl
+												? 'fill-white'
+												: 'fill-purple'
+										}`}
+									/>
+									<div
+										className={`whitespace-nowrap ${
+											avatarUrl
+												? 'text-white'
+												: 'text-purple'
+										} font-bold`}
+									>
 										+ Upload Image
 									</div>
 								</label>
 								<input
-									id='fileInput'
+									id='avatarFile'
 									className='hidden'
+									name='avatarFile'
 									type='file'
 								/>
 							</div>

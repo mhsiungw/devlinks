@@ -1,24 +1,50 @@
 import { Router } from 'express';
+import multer from 'multer';
+import path from 'path';
 import db from '../../db/index.js';
+
+const storage = multer.diskStorage({
+	destination(req, file, cb) {
+		cb(null, './public/images/');
+	},
+	filename(req, file, cb) {
+		const {
+			params: { profileId },
+			user
+		} = req;
+
+		cb(null, user.id + profileId + path.extname(file.originalname)); // Appending extension
+	}
+});
+
+const upload = multer({
+	storage
+});
+
+// const upload = multer({  });
 
 const router = Router();
 
-router.get('/:profileId', async (req, res) => {
+router.get('/:profileId', async (req, res, next) => {
 	const { profileId } = req.params;
 
-	const { rows } = await db.query(
-		`SELECT 
-			profile_id "profileId",
-			first_name "firstName",
-			last_name "lastName",
-			avatar_url "avatarUrl",
-			email,
-			links
-		FROM profiles WHERE profile_id = $1`,
-		[profileId]
-	);
+	try {
+		const { rows } = await db.query(
+			`SELECT 
+				profile_id "profileId",
+				first_name "firstName",
+				last_name "lastName",
+				avatar_url "avatarUrl",
+				email,
+				links
+			FROM profiles WHERE profile_id = $1`,
+			[profileId]
+		);
 
-	res.json({ message: 'ok', data: rows[0] });
+		res.json({ message: 'ok', data: rows[0] });
+	} catch (err) {
+		next(err);
+	}
 });
 
 router.post('/', async (req, res, next) => {
@@ -36,7 +62,7 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
-router.put('/:profileId', async (req, res, next) => {
+router.put('/:profileId', upload.any(), async (req, res, next) => {
 	const userId = req?.user?.id;
 	const { profileId } = req.params;
 
@@ -51,19 +77,37 @@ router.put('/:profileId', async (req, res, next) => {
 		}
 
 		const { firstName, lastName, email, links } = req.body;
+		const [avatar] = req.files;
 
 		await db.query(
 			`
 				UPDATE profiles
-				SET 
+				SET
 						first_name = $1,
 						last_name = $2,
 						email = $3,
 						links = $4
 				WHERE profile_id = $5;
 			`,
-			[firstName, lastName, email, JSON.stringify(links), profileId]
+			[firstName, lastName, email, links, profileId]
 		);
+
+		if (avatar.size) {
+			await db.query(
+				`
+					UPDATE profiles
+					SET
+							avatar_url = $1
+					WHERE profile_id = $2;
+				`,
+				[
+					`http://server:3000/static/images/${
+						userId + profileId + path.extname(avatar.originalname)
+					}`,
+					profileId
+				]
+			);
+		}
 		res.json({ message: 'ok' });
 	} catch (err) {
 		next(err);

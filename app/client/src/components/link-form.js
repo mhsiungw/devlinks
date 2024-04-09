@@ -95,14 +95,14 @@ export default function LinkForm({ type, url, index, moveCard, onRemove }) {
 				</div>
 				<Input
 					label='Platform'
-					name='platform'
+					name={`links[${index}].type`}
 					type='text'
 					defaultValue={type}
 					placeholder='e.g. alex@email.com'
 				/>
 				<Input
 					label='Link'
-					name='link'
+					name={`links[${index}].url`}
 					Icon={IconLink}
 					defaultValue={url}
 					placeholder='e.g. https://www.github.com/johnappleseed'

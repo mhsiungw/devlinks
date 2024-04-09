@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import update from 'immutability-helper';
 import Image from 'next/image';
+import { set } from 'lodash';
 import MockupIllustrationPhone from '@/images/illustration-phone-mockup.svg';
 import LinkBar from '@/components/link-bar';
 import Button from '@/components/button';
@@ -10,24 +11,6 @@ import EditLinkBlock from '@/app/profile/_block/editLink';
 import EditDetail from '@/app/profile/_block/editDetail';
 import { useAppSelector } from '@/lib/store/hooks';
 import { updateProfile } from '@/lib/actions/profile';
-
-// TODO: mv to packages/utils
-function chunk(array, size) {
-	// 宣告新陣列
-	const chunked = [];
-
-	// 創建一個迴圈，從 0 的 Math.ceil(array.length / size)
-	for (let i = 0; i < Math.ceil(array.length / size); i += 1) {
-		const start = i * size;
-		const end = start + size;
-
-		// 使用 slice 把陣列區塊取出來並 push 到新陣列
-		chunked.push(array.slice(start, end));
-	}
-
-	// 返回新陣列
-	return chunked;
-}
 
 export default function ProfileEditBlock({ profile }) {
 	const formRef = useRef();
@@ -38,40 +21,24 @@ export default function ProfileEditBlock({ profile }) {
 		profileState;
 
 	const handleFormChange = () => {
-		const formData = new FormData(formRef.current).entries();
+		const newState = new FormData(formRef.current)
+			.entries()
+			.filter(d => !d[0].includes('$ACTION_'))
+			.reduce((acc, [key, value]) => {
+				if (key === 'avatarFile' && value.size) {
+					acc.avatarUrl = URL.createObjectURL(value);
+				} else {
+					set(acc, key, value);
+				}
 
-		if (tab === 'edit-link') {
-			const newLinks = chunk(
-				Array.from(formData)
-					.filter(d => !d[0].includes('$'))
-					.map(([, value]) => value),
-				2
-			).map(([type, url]) => ({ type, url }));
+				return acc;
+			}, {});
 
-			setProfileState(prevProfile =>
-				update(prevProfile, {
-					links: {
-						$set: newLinks
-					}
-				})
-			);
-		}
-
-		if (tab === 'edit-detail') {
-			const newProfile = Array.from(formData).reduce(
-				(acc, [key, value]) => {
-					acc[key] = value;
-					return acc;
-				},
-				{}
-			);
-
-			setProfileState(prevProfile =>
-				update(prevProfile, {
-					$merge: newProfile
-				})
-			);
-		}
+		setProfileState(prev =>
+			update(prev, {
+				$merge: newState
+			})
+		);
 	};
 
 	return (
@@ -113,43 +80,45 @@ export default function ProfileEditBlock({ profile }) {
 					<div className='bg-white p-10 absolute top-0 bottom-0 left-0 right-0 overflow-y-auto'>
 						<form
 							noValidate
+							action={updateProfile.bind(null, profileId)}
 							ref={formRef}
-							onSubmit={e => {
-								e.preventDefault();
-							}}
 							onChange={handleFormChange}
 						>
 							<div className='flex flex-col gap-24'>
 								<div>
-									{tab === 'edit-link' ? (
+									<div
+										className={`${
+											tab === 'edit-link'
+												? 'block'
+												: 'hidden'
+										}`}
+									>
 										<EditLinkBlock
 											links={links}
 											onChange={setProfileState}
 										/>
-									) : (
+									</div>
+
+									<div
+										className={`${
+											tab === 'edit-detail'
+												? 'block'
+												: 'hidden'
+										}`}
+									>
 										<EditDetail
 											profile={{
 												firstName,
 												lastName,
-												email
+												email,
+												avatarUrl
 											}}
 										/>
-									)}
+									</div>
 								</div>
 								<div className='border-t border-border flex justify-end py-10'>
 									<div className='w-20'>
-										<Button
-											onClick={() =>
-												updateProfile(profileId, {
-													firstName,
-													lastName,
-													email,
-													links
-												})
-											}
-										>
-											Save
-										</Button>
+										<Button>Save</Button>
 									</div>
 								</div>
 							</div>
