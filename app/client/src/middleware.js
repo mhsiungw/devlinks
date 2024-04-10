@@ -3,10 +3,10 @@ const publicRoutes = new Set(['/signup', '/login', '/']);
 // TODO: find a better way not to hard-code connect.sid
 // eslint-disable-next-line import/prefer-default-export, consistent-return
 export function middleware(request) {
-	const cookieValue = request.cookies.get('connect.sid')?.value;
-	if (!cookieValue && !publicRoutes.has(request.nextUrl.pathname)) {
-		return Response.redirect(new URL('/login', request.url));
-	}
+	// const cookieValue = request.cookies.get('connect.sid')?.value;
+	// if (!cookieValue && !publicRoutes.has(request.nextUrl.pathname)) {
+	// 	return Response.redirect(new URL('/login', request.url));
+	// }
 }
 
 export const config = {
