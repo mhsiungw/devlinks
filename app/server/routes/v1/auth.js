@@ -11,9 +11,19 @@ router.post(
 		failureMessage: true,
 		failWithError: true
 	}),
-	(req, res) => {
+	async (req, res) => {
+		const {
+			rows: [{ profileId }]
+		} = await db.query(
+			`
+			SELECT profile_id "profileId" FROM profiles
+			WHERE user_id = $1
+		`,
+			[req.user.id]
+		);
+
 		// handle success
-		res.json({ message: 'ok', data: { id: req.user.id } });
+		res.json({ message: 'ok', data: { userId: req.user.id, profileId } });
 	},
 	// eslint-disable-next-line no-unused-vars
 	(err, req, res, next) => {
@@ -37,12 +47,24 @@ router.post('/signup', async (req, res, next) => {
 	try {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		await db.query('INSERT INTO users (email, password) VALUES ($1, $2)', [
-			email,
-			hashedPassword
-		]);
+		// TODO: add transition
+		const {
+			rows: [{ userId }]
+		} = await db.query(
+			`
+				INSERT INTO users (email, password) VALUES ($1, $2) RETURNING user_id AS "userId"
+			`,
+			[email, hashedPassword]
+		);
 
-		res.json({ message: 'ok' });
+		const {
+			rows: [{ profileId }]
+		} = await db.query(
+			`INSERT INTO profiles (user_id) VALUES ($1) RETURNING profile_id AS "profileId"`,
+			[userId]
+		);
+
+		res.json({ message: 'ok', data: { profileId } });
 	} catch (err) {
 		next(err);
 	}

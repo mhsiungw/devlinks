@@ -55,11 +55,11 @@ async function initDb() {
 				(
 					profile_id SERIAL PRIMARY KEY,
 					user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-					first_name VARCHAR( 255 ) NOT NULL,
-					last_name VARCHAR( 255 ) NOT NULL,
-					email VARCHAR ( 255 ) NOT NULL,
-					avatar_url TEXT,
-					links JSONB,
+					first_name VARCHAR( 255 ) NOT NULL DEFAULT '',
+					last_name VARCHAR( 255 ) NOT NULL DEFAULT '',
+					email VARCHAR ( 255 ) NOT NULL DEFAULT '',
+					avatar_url TEXT NOT NULL DEFAULT '',
+					links JSONB DEFAULT '[]'::JSONB,
 					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 				)
 			`

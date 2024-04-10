@@ -37,11 +37,15 @@ export async function login(data) {
 
 	cookies().set(cConfig);
 
+	const {
+		data: { profileId }
+	} = await res.json();
+
 	if (res.status >= 400) {
 		const result = await res.json();
 
 		return result.message;
 	}
 
-	return redirect('/profile');
+	return redirect(`/profile/${profileId}`);
 }
