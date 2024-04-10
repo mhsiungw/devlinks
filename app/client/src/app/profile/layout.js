@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import LogoDevlinksLarge from '@/images/logo-devlinks-large.svg';
 import IconLink from '@/images/icon-link.svg';
 import IconProfileDetailsHeader from '@/images/icon-profile-details-header.svg';
@@ -16,12 +18,14 @@ stroke-purple`
 export default function ProfileLayout({ children }) {
 	const dispatch = useAppDispatch();
 	const tab = useAppSelector(state => state?.tab);
+	const pathName = usePathname();
 
 	return (
 		<div className='p-6 h-full flex flex-col'>
 			<div className='pb-6'>
 				<div className='flex justify-between p-6 bg-white rounded-xl'>
 					<LogoDevlinksLarge />
+					{/* TODO: start: make it a client component */}
 					<div className='flex'>
 						<div className='min-w-28'>
 							<button
@@ -46,11 +50,14 @@ export default function ProfileLayout({ children }) {
 							</button>
 						</div>
 					</div>
+					{/* TODO: end */}
 
 					<div className='w-28'>
-						<button className='w-full text-purple font-medium rounded-lg p-3 border border-purple'>
-							<span>Preview</span>
-						</button>
+						<Link href={pathName.replace('profile', 'preview')}>
+							<button className='w-full text-purple font-medium rounded-lg p-3 border border-purple'>
+								<span>Preview</span>
+							</button>
+						</Link>
 					</div>
 				</div>
 			</div>
