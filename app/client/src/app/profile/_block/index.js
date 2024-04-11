@@ -34,12 +34,16 @@ export default function ProfileEditBlock({ profile: _profile }) {
 
 	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
 
-	const handleFormChange = () => {
+	const handleFormChange = e => {
 		const newState = new FormData(formRef.current)
 			.entries()
 			.filter(d => !d[0].includes('$ACTION_'))
 			.reduce((acc, [key, value]) => {
-				if (key === 'avatarFile' && value.size) {
+				if (
+					e.target.id === 'avatarFile' &&
+					key === 'avatarFile' &&
+					value.size
+				) {
 					acc.avatarUrl = URL.createObjectURL(value);
 				} else {
 					set(acc, key, value);
