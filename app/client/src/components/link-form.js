@@ -6,7 +6,7 @@ import Input from '@/components/input';
 
 const dndType = 'draggable-item';
 
-export default function LinkForm({ type, url, index, moveCard, onRemove }) {
+export default function LinkForm({ id, type, url, index, moveCard, onRemove }) {
 	const ref = useRef(null);
 	const iconRef = useRef(null);
 	const [{ handlerId }, drop] = useDrop({
@@ -70,44 +70,52 @@ export default function LinkForm({ type, url, index, moveCard, onRemove }) {
 	drop(ref);
 
 	return (
-		<div
-			ref={ref}
-			className={`${isDragging ? 'opacity-0' : 'opacity-100'}`}
-		>
+		<div ref={preview}>
 			<div
-				ref={preview}
-				data-handler-id={handlerId}
-				className='bg-light-grey text-grey p-5 space-y-3'
+				ref={ref}
+				className={`${isDragging ? 'opacity-0' : 'opacity-100'}`}
 			>
-				<div className='flex justify-between'>
-					<div className='flex items-center gap-2'>
-						<div ref={iconRef} className='cursor-move'>
-							<IconDragAndDrop />
+				<div
+					data-handler-id={handlerId}
+					className='bg-light-grey text-grey p-5 space-y-3'
+				>
+					<div className='flex justify-between'>
+						<div className='flex items-center gap-2'>
+							<div ref={iconRef} className='cursor-move'>
+								<IconDragAndDrop />
+							</div>
+							Link#{index + 1}
 						</div>
-						Link#{index + 1}
+						<div
+							className='cursor-pointer'
+							onClick={() => onRemove(index)}
+						>
+							Remove
+						</div>
 					</div>
-					<div
-						className='cursor-pointer'
-						onClick={() => onRemove(index)}
-					>
-						Remove
-					</div>
+					<input
+						readOnly
+						className='hidden'
+						type='text'
+						name={`links[${index}].id`}
+						value={id}
+					/>
+					<Input
+						label='Platform'
+						name={`links[${index}].type`}
+						type='text'
+						defaultValue={type}
+						placeholder='e.g. alex@email.com'
+					/>
+					<Input
+						label='Link'
+						name={`links[${index}].url`}
+						Icon={IconLink}
+						defaultValue={url}
+						placeholder='e.g. https://www.github.com/johnappleseed'
+						type='text'
+					/>
 				</div>
-				<Input
-					label='Platform'
-					name={`links[${index}].type`}
-					type='text'
-					defaultValue={type}
-					placeholder='e.g. alex@email.com'
-				/>
-				<Input
-					label='Link'
-					name={`links[${index}].url`}
-					Icon={IconLink}
-					defaultValue={url}
-					placeholder='e.g. https://www.github.com/johnappleseed'
-					type='text'
-				/>
 			</div>
 		</div>
 	);

@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import update from 'immutability-helper';
 import Image from 'next/image';
-import { set } from 'lodash';
+import { set, uniqueId } from 'lodash';
 import MockupIllustrationPhone from '@/images/illustration-phone-mockup.svg';
 import LinkBar from '@/components/link-bar';
 import Button from '@/components/button';
@@ -12,13 +12,27 @@ import EditDetail from '@/app/profile/_block/editDetail';
 import { useAppSelector } from '@/lib/store/hooks';
 import { updateProfile } from '@/lib/actions/profile';
 
-export default function ProfileEditBlock({ profile }) {
+export default function ProfileEditBlock({ profile: _profile }) {
 	const formRef = useRef();
 	const tab = useAppSelector(state => state.tab);
-	const [profileState, setProfileState] = useState(profile);
 
-	const { links, profileId, firstName, lastName, email, avatarUrl } =
-		profileState;
+	const profileWithLinkId = useMemo(
+		() =>
+			update(_profile, {
+				links: {
+					$set: _profile.links.map(l => {
+						const id = uniqueId();
+						set(l, 'id', id);
+						return l;
+					})
+				}
+			}),
+		[_profile]
+	);
+
+	const [profile, setProfile] = useState(profileWithLinkId);
+
+	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
 
 	const handleFormChange = () => {
 		const newState = new FormData(formRef.current)
@@ -34,7 +48,7 @@ export default function ProfileEditBlock({ profile }) {
 				return acc;
 			}, {});
 
-		setProfileState(prev =>
+		setProfile(prev =>
 			update(prev, {
 				$merge: newState
 			})
@@ -63,9 +77,9 @@ export default function ProfileEditBlock({ profile }) {
 							<div className='absolute left-1/2 -translate-x-1/2 top-[208px] text-center w-52 bg-white'>
 								{email}
 							</div>
-							{links.map(({ type, url }, index) => (
+							{links.map(({ id, type, url }, index) => (
 								<div
-									key={type}
+									key={id}
 									style={{ top: 278 + index * 63 }}
 									className='absolute left-9 w-60'
 								>
@@ -95,7 +109,7 @@ export default function ProfileEditBlock({ profile }) {
 									>
 										<EditLinkBlock
 											links={links}
-											onChange={setProfileState}
+											onChange={setProfile}
 										/>
 									</div>
 

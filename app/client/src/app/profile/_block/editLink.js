@@ -1,19 +1,19 @@
 import update from 'immutability-helper';
 import { useCallback } from 'react';
 import LinkForm from '@/components/link-form';
+import { uniqueId } from 'lodash';
 import DraggableContainer from '@/components/draggable/draggable-container';
-
-const uid = () => Date.now().toString(36) + Math.random().toString(36);
 
 export default function EditLinkBlock({ links = [], onChange }) {
 	const addLink = useCallback(() => {
 		onChange(prevProfile => {
+			// TODO: make it easy to debug
 			if (prevProfile.length === 5) {
 				return prevProfile;
 			}
 
 			return update(prevProfile, {
-				links: { $push: [{ id: uid(), url: '' }] }
+				links: { $push: [{ id: uniqueId(), url: '' }] }
 			});
 		});
 	}, [onChange]);
@@ -49,9 +49,10 @@ export default function EditLinkBlock({ links = [], onChange }) {
 
 	const renderForm = useCallback(
 		// TODO: fix duplicate id
-		({ type, url }, index) => (
+		({ id, type, url }, index) => (
 			<LinkForm
-				key={type}
+				key={id}
+				id={id}
 				type={type}
 				url={url}
 				index={index}
