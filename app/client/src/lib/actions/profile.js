@@ -3,7 +3,6 @@
 import { cookies } from 'next/headers';
 import { set } from 'lodash';
 
-// eslint-disable-next-line import/prefer-default-export
 export async function updateProfile(profileId, formData) {
 	const sanitizedData = Array.from(formData)
 		.filter(d => !d[0].includes('$ACTION_'))
@@ -39,4 +38,16 @@ export async function updateProfile(profileId, formData) {
 	const result = await res.json();
 
 	return result;
+}
+
+export async function openProfile(profileId) {
+	const {
+		data: { openProfileId }
+	} = await fetch(`${process.env.APP_API_URL}/profile/share/${profileId}`, {
+		headers: {
+			Cookie: cookies().toString()
+		}
+	}).then(res => res.json());
+
+	return openProfileId;
 }

@@ -60,7 +60,8 @@ async function initDb() {
 					email VARCHAR ( 255 ) NOT NULL DEFAULT '',
 					avatar_url TEXT NOT NULL DEFAULT '',
 					links JSONB DEFAULT '[]'::JSONB,
-					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					UNIQUE (user_id)
 				)
 			`
 		);
@@ -95,9 +96,10 @@ async function initDb() {
 				CREATE TABLE IF NOT EXISTS open_profiles
 				(	
 					open_profile_id SERIAL PRIMARY KEY,
-					profile_id INT REFERENCES profiles(profile_id) ON DELETE CASCADE,
-					user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
-					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+					profile_id INT REFERENCES profiles(profile_id) ON DELETE CASCADE NOT NULL,
+					user_id INT REFERENCES users(user_id) ON DELETE CASCADE NOT NULL,
+					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					UNIQUE (user_id)
 				)
 			`
 		);

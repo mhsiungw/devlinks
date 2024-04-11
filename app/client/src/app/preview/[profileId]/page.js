@@ -2,8 +2,8 @@ import 'server-only';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cookies } from 'next/headers';
-import Button from '@/components/button';
 import LinkBar from '@/components/link-bar';
+import OpenProfileButton from './open-profile-button';
 
 export default async function Preview(props) {
 	const { profileId } = props.params;
@@ -35,7 +35,7 @@ export default async function Preview(props) {
 					</Link>
 				</div>
 				<div className='w-32'>
-					<Button>Share Link</Button>
+					<OpenProfileButton profileId={profileId} />
 				</div>
 			</div>
 			<div className='bg-white shadow-lg max-w-96 p-14 rounded-2xl mx-auto space-y-10'>

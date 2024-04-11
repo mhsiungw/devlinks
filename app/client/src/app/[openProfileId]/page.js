@@ -2,7 +2,7 @@ import 'server-only';
 import Image from 'next/image';
 import LinkBar from '@/components/link-bar';
 
-export default async function Preview(props) {
+export default async function OpenProfile(props) {
 	const { openProfileId } = props.params;
 
 	const res = await fetch(

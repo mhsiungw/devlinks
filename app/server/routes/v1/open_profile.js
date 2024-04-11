@@ -9,8 +9,15 @@ router.get('/:openProfileId', async (req, res, next) => {
 
 		const { rows } = await db.query(
 			`
-				SELECT * FROM open_profiles
-				JOIN profiles ON open_profiles.open_profile_id = profiles.profile_id
+				SELECT
+					profiles.profile_id "profileId",
+					profiles.first_name "firstName",
+					profiles.last_name "lastName",
+					profiles.avatar_url "avatarUrl",
+					profiles.email,
+					profiles.links
+				FROM profiles
+				JOIN open_profiles ON profiles.profile_id = open_profiles.open_profile_id
 				WHERE open_profiles.open_profile_id = $1
 			`,
 			[openProfileId]
