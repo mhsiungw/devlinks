@@ -3,12 +3,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cookies } from 'next/headers';
 import LinkBar from '@/components/link-bar';
+import { getAPIUrl } from '@/lib/utils';
 import OpenProfileButton from './open-profile-button';
 
 export default async function Preview(props) {
 	const { profileId } = props.params;
 
-	const res = await fetch(`${process.env.APP_API_URL}/profile/${profileId}`, {
+	const res = await fetch(`${getAPIUrl()}/profile/${profileId}`, {
 		method: 'GET',
 		headers: {
 			Cookie: cookies().toString()

@@ -11,22 +11,21 @@ import Input from '@/components/input';
 import Button from '@/components/button';
 import { showToast } from '@/components/toast/utils';
 import ErrorMessage from '@/components/error-message';
+import { getAPIUrl } from '@/lib/utils';
 
-const Schema = (
-	z
-		.object({
-			email: z.string().email(),
-			password: z.string().min(6),
-			confirmPassword: z.string().min(6)
-		})
-		.refine(({ password, confirmPassword }) => password === confirmPassword, {
-			message: "Passwords don't match",
-			path: ['confirmPassword']
-		})
-);
+const Schema = z
+	.object({
+		email: z.string().email(),
+		password: z.string().min(6),
+		confirmPassword: z.string().min(6)
+	})
+	.refine(({ password, confirmPassword }) => password === confirmPassword, {
+		message: "Passwords don't match",
+		path: ['confirmPassword']
+	});
 
 function signup(data) {
-	return fetch('http://localhost:3000/api/v1/auth/signup', {
+	return fetch(`${getAPIUrl()}/auth/signup`, {
 		method: 'POST',
 		body: JSON.stringify(data),
 		headers: {
@@ -69,7 +68,9 @@ export default function Register() {
 							Icon={IconEmail}
 							placeholder='e.g. alex@email.com'
 						/>
-						<ErrorMessage>{zo.errors.email(e => e.message)}</ErrorMessage>
+						<ErrorMessage>
+							{zo.errors.email(e => e.message)}
+						</ErrorMessage>
 						<Input
 							label='Create Password'
 							name={zo.fields.password()}
@@ -77,16 +78,22 @@ export default function Register() {
 							placeholder='At least 6 characters'
 							type='password'
 						/>
-						<ErrorMessage>{zo.errors.password(e => e.message)}</ErrorMessage>
+						<ErrorMessage>
+							{zo.errors.password(e => e.message)}
+						</ErrorMessage>
 						<Input
-							label="Confirm Password"
+							label='Confirm Password'
 							name={zo.fields.confirmPassword()}
 							Icon={IconPassword}
 							placeholder='At least 6 characters'
 							type='password'
 						/>
-						<ErrorMessage>{zo.errors.confirmPassword(e => e.message)}</ErrorMessage>
-						<div className='text-gray text-xs'>Password must contain at least 8 characters</div>
+						<ErrorMessage>
+							{zo.errors.confirmPassword(e => e.message)}
+						</ErrorMessage>
+						<div className='text-gray text-xs'>
+							Password must contain at least 8 characters
+						</div>
 						<Button>Create new account</Button>
 					</Form>
 					<div className='text-base mt-6 flex justify-center'>

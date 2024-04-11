@@ -1,13 +1,12 @@
 import 'server-only';
 import Image from 'next/image';
 import LinkBar from '@/components/link-bar';
+import { getAPIUrl } from '@/lib/utils';
 
 export default async function OpenProfile(props) {
 	const { openProfileId } = props.params;
 
-	const res = await fetch(
-		`${process.env.APP_API_URL}/open_profile/${openProfileId}`
-	);
+	const res = await fetch(`${getAPIUrl()}/open_profile/${openProfileId}`);
 
 	const { data } = await res.json();
 

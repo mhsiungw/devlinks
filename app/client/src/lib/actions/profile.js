@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { set } from 'lodash';
+import { getAPIUrl } from '../utils';
 
 export async function updateProfile(profileId, formData) {
 	const sanitizedData = Array.from(formData)
@@ -24,16 +25,13 @@ export async function updateProfile(profileId, formData) {
 		}
 	});
 
-	const res = await fetch(
-		`${process.env.APP_API_URL}/profile/${[profileId]}`,
-		{
-			method: 'PUT',
-			body: newFormData,
-			headers: {
-				Cookie: cookies().toString()
-			}
+	const res = await fetch(`${getAPIUrl()}/profile/${[profileId]}`, {
+		method: 'PUT',
+		body: newFormData,
+		headers: {
+			Cookie: cookies().toString()
 		}
-	);
+	});
 
 	const result = await res.json();
 
@@ -43,7 +41,7 @@ export async function updateProfile(profileId, formData) {
 export async function openProfile(profileId) {
 	const {
 		data: { openProfileId }
-	} = await fetch(`${process.env.APP_API_URL}/profile/share/${profileId}`, {
+	} = await fetch(`${getAPIUrl()}/profile/share/${profileId}`, {
 		headers: {
 			Cookie: cookies().toString()
 		}

@@ -3,10 +3,11 @@
 import cookie from 'cookie';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getAPIUrl } from '../utils';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function login(data) {
-	const res = await fetch(`${process.env.APP_API_URL}/auth/login/password`, {
+	const res = await fetch(`${getAPIUrl()}/auth/login/password`, {
 		method: 'POST',
 		body: JSON.stringify(data),
 		credentials: 'include',
