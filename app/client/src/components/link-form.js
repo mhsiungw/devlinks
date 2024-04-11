@@ -68,54 +68,53 @@ export default function LinkForm({ id, type, url, index, moveCard, onRemove }) {
 	});
 	drag(iconRef);
 	drop(ref);
+	preview(ref);
 
 	return (
-		<div ref={preview}>
+		<div
+			ref={ref}
+			className={`${isDragging ? 'opacity-0' : 'opacity-100'}`}
+		>
 			<div
-				ref={ref}
-				className={`${isDragging ? 'opacity-0' : 'opacity-100'}`}
+				data-handler-id={handlerId}
+				className='bg-light-grey text-grey p-5 space-y-3'
 			>
-				<div
-					data-handler-id={handlerId}
-					className='bg-light-grey text-grey p-5 space-y-3'
-				>
-					<div className='flex justify-between'>
-						<div className='flex items-center gap-2'>
-							<div ref={iconRef} className='cursor-move'>
-								<IconDragAndDrop />
-							</div>
-							Link#{index + 1}
+				<div className='flex justify-between'>
+					<div className='flex items-center gap-2'>
+						<div ref={iconRef} className='cursor-move'>
+							<IconDragAndDrop />
 						</div>
-						<div
-							className='cursor-pointer'
-							onClick={() => onRemove(index)}
-						>
-							Remove
-						</div>
+						Link#{index + 1}
 					</div>
-					<input
-						readOnly
-						className='hidden'
-						type='text'
-						name={`links[${index}].id`}
-						value={id}
-					/>
-					<Input
-						label='Platform'
-						name={`links[${index}].type`}
-						type='text'
-						defaultValue={type}
-						placeholder='e.g. alex@email.com'
-					/>
-					<Input
-						label='Link'
-						name={`links[${index}].url`}
-						Icon={IconLink}
-						defaultValue={url}
-						placeholder='e.g. https://www.github.com/johnappleseed'
-						type='text'
-					/>
+					<div
+						className='cursor-pointer'
+						onClick={() => onRemove(index)}
+					>
+						Remove
+					</div>
 				</div>
+				<input
+					readOnly
+					className='hidden'
+					type='text'
+					name={`links[${index}].id`}
+					value={id}
+				/>
+				<Input
+					label='Platform'
+					name={`links[${index}].type`}
+					type='text'
+					defaultValue={type}
+					placeholder='e.g. alex@email.com'
+				/>
+				<Input
+					label='Link'
+					name={`links[${index}].url`}
+					Icon={IconLink}
+					defaultValue={url}
+					placeholder='e.g. https://www.github.com/johnappleseed'
+					type='text'
+				/>
 			</div>
 		</div>
 	);
