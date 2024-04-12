@@ -1,17 +1,5 @@
 version: '3'
 services:
-    server:
-        container_name: server
-        build: .
-        image: app_image
-        ports:
-            - '3000:3000'
-        volumes:
-            - .:/app
-            - /app/node_modules
-        depends_on:
-            - db
-        command: 'npm run dev -w server && npm run seed -w server'
     db:
         container_name: database
         image: 'postgres:latest'
@@ -21,7 +9,20 @@ services:
             - PGUSER=postgres
         volumes:
             - db:/var/lib/postgresql/data
-
+    server:
+        container_name: server
+        build:
+            context: ../../
+            dockerfile: docker/development/Dockerfile
+        image: app_image
+        ports:
+            - '3000:3000'
+        volumes:
+            - ../../:/app
+            - /app/node_modules
+        depends_on:
+            - db
+        command: 'npm run dev -w server && npm run seed -w server'
     client:
         container_name: client
         image: app_image
@@ -30,7 +31,7 @@ services:
         ports:
             - '3001:3001'
         volumes:
-            - .:/app
+            - ../../:/app
             - /app/node_modules
         links:
             - server

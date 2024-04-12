@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+    client:
+        build:
+            context: ../../
+            dockerfile: docker/staging/Dockerfile.client
+        image: minhsiung/devlinks.client.staging
+        ports:
+            - '3001:3001'
+    server:
+        build:
+            context: ../../
+            dockerfile: docker/staging/Dockerfile.server
+        image: minhsiung/devlinks.server.staging
+        ports:
+            - '3000:3000'

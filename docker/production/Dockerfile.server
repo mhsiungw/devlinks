@@ -1,0 +1,23 @@
+FROM node:20-alpine AS base
+
+
+FROM base AS deps
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+COPY ./package.json ./package-lock.json ./
+COPY ./app/server/package.json ./app/server/package-lock.json ./app/server/
+
+RUN npm ci
+
+FROM  base AS runner
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY ./app/server/ ./
+
+CMD ["npm", "start"]
+
+

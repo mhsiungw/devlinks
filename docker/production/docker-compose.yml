@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    client:
+        build:
+            context: ../../
+            dockerfile: docker/production/Dockerfile.client
+        image: minhsiung/devlinks.client
+        ports:
+            - '3001:3001'
+        platform: linux/amd64
+    server:
+        build:
+            context: ../../
+            dockerfile: docker/production/Dockerfile.server
+        image: minhsiung/devlinks.server
+        ports:
+            - '3000:3000'
+        platform: linux/amd64

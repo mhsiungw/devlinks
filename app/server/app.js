@@ -13,9 +13,11 @@ import errorHandler from './services/error-handler/index.js';
 
 const app = express();
 
+console.log('process.env', process.env);
+
 app.use(
 	cors({
-		origin: 'http://localhost:3001',
+		origin: process.env.origin,
 		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
 		credentials: true
 	})

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	output: 'standalone',
 	webpack(config) {
 		config.module.rules.push({
 			test: /\.svg$/,
@@ -15,6 +16,11 @@ const nextConfig = {
 				port: '3000'
 			}
 		]
+	},
+	experimental: {
+		serverActions: {
+			allowedOrigins: ['minstack.lol']
+		}
 	}
 };
 

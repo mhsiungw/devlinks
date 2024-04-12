@@ -4,12 +4,14 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "DEBUG=development:* nodemon ./bin/www",
-		"seed": "node ./bin/db/seed",
+		"dev": "DEBUG=development:* dotenvx run --env-file=.env.development -- nodemon ./bin/www",
+		"start": "dotenvx run --env-file=.env.production -- node ./bin/www",
+		"seed": "dotenvx run --env-file=.env.development -- node ./bin/db/seed",
 		"lint": "eslint .",
 		"format": "eslint --fix ."
 	},
 	"dependencies": {
+		"@dotenvx/dotenvx": "0.32.0",
 		"bcrypt": "5.1.1",
 		"cookie-parser": "1.4.6",
 		"cors": "2.8.5",

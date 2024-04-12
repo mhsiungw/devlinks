@@ -1,8 +1,6 @@
 /* eslint-disable import/prefer-default-export */
-import { combineSlices, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import profileReducer from './features/profile/profileSlice';
-
-const rootReducer = combineSlices();
 
 export const makeStore = () =>
 	configureStore({

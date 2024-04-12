@@ -2,3 +2,8 @@ node_modules
 dockercompose.yaml
 .git
 .DS_Store
+.vscode
+.eslintrc.cjs
+.gitignore
+.env.local
+docker
