@@ -1,0 +1,14 @@
+FROM node:20 AS base
+
+FROM base AS deps
+WORKDIR /app
+COPY ./app/server/package.json ./app/server/package-lock.json* ./app/server/
+COPY ./package.json ./package-lock.json* ./
+RUN npm ci
+
+FROM base AS runner
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY ./app/server/ ./
+
+CMD npm run dev
