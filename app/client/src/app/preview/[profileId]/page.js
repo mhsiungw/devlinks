@@ -31,7 +31,7 @@ export default async function Preview(props) {
 				<div>
 					<Link href={`/profile/${profileId}`}>
 						<button className='w-full text-purple font-medium rounded-lg p-3 border border-purple'>
-							<span>Preview</span>
+							<span>Back to Editor</span>
 						</button>
 					</Link>
 				</div>
