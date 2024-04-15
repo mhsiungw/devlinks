@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import { useCallback } from 'react';
-import LinkForm from '@/components/link-form';
+import LinkInput from '@/app/profile/[profileId]/_components/link-input';
 import { uniqueId } from 'lodash';
 import DraggableContainer from '@/components/draggable/draggable-container';
 
@@ -48,9 +48,8 @@ export default function EditLinkBlock({ links = [], onChange }) {
 	);
 
 	const renderForm = useCallback(
-		// TODO: fix duplicate id
 		({ id, type, url }, index) => (
-			<LinkForm
+			<LinkInput
 				key={id}
 				id={id}
 				type={type}

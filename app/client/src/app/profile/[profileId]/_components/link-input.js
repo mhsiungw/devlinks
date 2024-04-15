@@ -6,7 +6,14 @@ import Input from '@/components/input';
 
 const dndType = 'draggable-item';
 
-export default function LinkForm({ id, type, url, index, moveCard, onRemove }) {
+export default function LinkInput({
+	id,
+	type,
+	url,
+	index,
+	moveCard,
+	onRemove
+}) {
 	const ref = useRef(null);
 	const iconRef = useRef(null);
 	const [{ handlerId }, drop] = useDrop({
