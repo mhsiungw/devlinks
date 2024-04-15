@@ -5,7 +5,7 @@ import LoginForm from '@/app/login/login-form';
 export default async function Login() {
 	return (
 		<div className='flex justify-center items-center h-full'>
-			<div className='w-1/3 min-w-[425px]'>
+			<div className='w-1/3 min-w-[425px] max-w-[476px]'>
 				<div className='flex justify-center mb-14'>
 					<LogoDevlinksLarge />
 				</div>

@@ -13,8 +13,6 @@ import errorHandler from './services/error-handler/index.js';
 
 const app = express();
 
-console.log('process.env', process.env);
-
 app.use(
 	cors({
 		origin: process.env.origin,

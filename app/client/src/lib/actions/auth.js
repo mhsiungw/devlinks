@@ -6,21 +6,32 @@ import { redirect } from 'next/navigation';
 import { getAPIUrl } from '../utils';
 
 // eslint-disable-next-line import/prefer-default-export
-export async function login(data) {
-	const res = await fetch(`${getAPIUrl()}/auth/login/password`, {
+export async function login(_, formData) {
+	const submitData = {
+		email: formData.get('email'),
+		password: formData.get('password')
+	};
+
+	const response = await fetch(`${getAPIUrl()}/auth/login/password`, {
 		method: 'POST',
-		body: JSON.stringify(data),
+		body: JSON.stringify(submitData),
 		credentials: 'include',
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	});
 
+	const { error, data, message } = await response.json();
+
+	if (error) {
+		return { message };
+	}
+
 	const cConfig = {
 		httpOnly: true
 	};
 
-	res.headers
+	response.headers
 		.getSetCookie()
 		.map(c => cookie.parse(c))
 		.forEach(c => {
@@ -38,15 +49,7 @@ export async function login(data) {
 
 	cookies().set(cConfig);
 
-	const {
-		data: { profileId }
-	} = await res.json();
-
-	if (res.status >= 400) {
-		const result = await res.json();
-
-		return result.message;
-	}
+	const { profileId } = data;
 
 	return redirect(`/profile/${profileId}`);
 }

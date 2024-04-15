@@ -1,8 +1,8 @@
 import { forwardRef } from 'react';
 
-const Form = forwardRef((props, ref) => (
-	<form ref={ref} className='space-y-6' noValidate>
-		{props.children}
+const Form = forwardRef(({ action, children }, ref) => (
+	<form action={action} ref={ref} noValidate>
+		{children}
 	</form>
 ));
 

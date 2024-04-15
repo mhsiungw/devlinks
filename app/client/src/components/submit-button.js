@@ -1,10 +1,14 @@
 'use client';
 
-function Button({ type = 'submit', children, disabled, onClick }) {
+import { useFormStatus } from 'react-dom';
+
+export default function SubmitButton({ children, onClick }) {
+	const { pending } = useFormStatus();
+
 	return (
 		<button
-			disabled={disabled}
-			type={type}
+			disabled={pending}
+			type='submit'
 			onClick={onClick}
 			className='bg-purple w-full text-white rounded-lg py-3 disabled:opacity-75'
 		>
@@ -12,5 +16,3 @@ function Button({ type = 'submit', children, disabled, onClick }) {
 		</button>
 	);
 }
-
-export default Button;

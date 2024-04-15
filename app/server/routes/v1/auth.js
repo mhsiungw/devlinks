@@ -23,12 +23,20 @@ router.post(
 		);
 
 		// handle success
-		res.json({ message: 'ok', data: { userId: req.user.id, profileId } });
+		res.json({
+			error: false,
+			message: 'ok',
+			data: { userId: req.user.id, profileId }
+		});
 	},
 	// eslint-disable-next-line no-unused-vars
-	(err, req, res, next) => {
+	(_, req, res, __) => {
 		// Handle error
-		res.status(401).json({ message: req.session.messages[0] });
+		res.status(401).json({
+			error: true,
+			message: req.session.messages[0],
+			data: null
+		});
 	}
 );
 
