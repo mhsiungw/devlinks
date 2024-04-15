@@ -14,7 +14,10 @@ export default app => {
 		res.locals.error = req.app.get('env') === 'development' ? err : {};
 
 		// render the error page
-		res.status(err.status || 500);
-		res.json({ err: err.message });
+		res.status(err.status || 500).json({
+			error: true,
+			message: err.message || 'Something wnet wrong!',
+			data: null
+		});
 	});
 };

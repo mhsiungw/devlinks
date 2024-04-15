@@ -53,26 +53,41 @@ router.post('/signup', async (req, res, next) => {
 	const { email, password } = req.body;
 
 	try {
-		const hashedPassword = await bcrypt.hash(password, 10);
-
-		// TODO: add transition
 		const {
-			rows: [{ userId }]
-		} = await db.query(
-			`
-				INSERT INTO users (email, password) VALUES ($1, $2) RETURNING user_id AS "userId"
-			`,
-			[email, hashedPassword]
-		);
+			rows: [{ count }]
+		} = await db.query(`SELECT COUNT(*) FROM users WHERE email = $1`, [
+			email
+		]);
+
+		if (count >= 1) {
+			return res.status(200).json({
+				error: false,
+				message: 'Email already in use',
+				data: null
+			});
+		}
 
 		const {
 			rows: [{ profileId }]
 		} = await db.query(
-			`INSERT INTO profiles (user_id) VALUES ($1) RETURNING profile_id AS "profileId"`,
-			[userId]
+			`
+				WITH inserted_user AS (
+					INSERT INTO users (email, password)
+					VALUES ($1, $2)
+					RETURNING user_id AS user_id
+				)
+				INSERT INTO profiles (user_id)
+				VALUES ((SELECT user_id FROM inserted_user))
+				RETURNING profile_id AS profileId;
+			`,
+			[email, await bcrypt.hash(password, 10)]
 		);
 
-		res.json({ message: 'ok', data: { profileId } });
+		res.json({
+			error: false,
+			message: 'User has been created!',
+			data: { profileId }
+		});
 	} catch (err) {
 		next(err);
 	}
