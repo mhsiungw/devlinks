@@ -6,7 +6,9 @@ import { getAPIUrl } from '@/lib/utils';
 export default async function OpenProfile(props) {
 	const { openProfileId } = props.params;
 
-	const res = await fetch(`${getAPIUrl()}/open_profile/${openProfileId}`);
+	const res = await fetch(`${getAPIUrl()}/open_profile/${openProfileId}`, {
+		next: { revalidate: 0 }
+	});
 
 	const { data } = await res.json();
 
