@@ -19,7 +19,7 @@ services:
             - '3000:3000'
         volumes:
             - ../../app/server:/app
-            - /app/node_modules
+            - node_modules_server:/app/node_modules
         depends_on:
             - db
     client:
@@ -34,7 +34,9 @@ services:
             - '3001:3001'
         volumes:
             - ../../app/client:/app
-            - /app/node_modules
+            - node_modules_client:/app/node_modules
 volumes:
     db:
         driver: local
+    node_modules_server:
+    node_modules_client:
