@@ -1,8 +1,10 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useFormState } from 'react-dom';
+import { useRouter } from 'next/navigation';
 import z from 'zod';
 import { useZorm } from 'react-zorm';
-import { useFormState } from 'react-dom';
 import IconEmail from '@/images/icon-email.svg';
 import IconPassword from '@/images/icon-password.svg';
 import { signup } from '@/lib/actions/auth';
@@ -11,7 +13,6 @@ import Input from '@/components/input';
 import { showToast } from '@/components/toast/utils';
 import SubmitButton from '@/components/submit-button';
 import ErrorMessage from '@/components/error-message';
-import { useEffect } from 'react';
 
 const Schema = z
 	.object({
@@ -25,12 +26,17 @@ const Schema = z
 	});
 
 export default function SignupForm() {
+	const router = useRouter();
 	const [state, formAction] = useFormState(signup, null);
 	const zo = useZorm('register', Schema);
 
 	useEffect(() => {
 		if (state) {
 			showToast(null, state.message);
+		}
+
+		if (state?.error === false) {
+			router.push('login');
 		}
 	}, [state]);
 

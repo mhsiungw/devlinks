@@ -68,9 +68,5 @@ export async function signup(_, formData) {
 		}
 	}).then(res => res.json());
 
-	if (error) {
-		return { error, message };
-	}
-
 	return { error, message };
 }
