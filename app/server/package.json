@@ -5,6 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "DEBUG=development:* dotenvx run --env-file=.env.development -- nodemon ./bin/www",
+		"staging": "dotenvx run --env-file=.env.staging -- nodemon ./bin/www",
 		"start": "dotenvx run --env-file=.env.production -- node ./bin/www",
 		"seed": "dotenvx run --env-file=.env.development -- node ./bin/db/seed",
 		"lint": "eslint .",

@@ -14,13 +14,15 @@ export default function Illustration({
 			<div className='absolute top-0 right-0 bottom-0 left-0 overflow-auto flex items-center justify-center'>
 				<div className='relative'>
 					<div className='absolute left-1/2 -translate-x-1/2 top-[64px] bg-white rounded-full overflow-hidden'>
-						<Image
-							className='w-24 h-24 object-cover'
-							width='96'
-							height='96'
-							src={avatarUrl}
-							alt='avatar'
-						/>
+						{avatarUrl && (
+							<Image
+								className='w-24 h-24 object-cover'
+								width='96'
+								height='96'
+								src={avatarUrl}
+								alt='avatar'
+							/>
+						)}
 					</div>
 					<div className='absolute left-1/2 -translate-x-1/2 top-[182px] text-center w-52 bg-white space-x-1'>
 						<span>{firstName}</span>

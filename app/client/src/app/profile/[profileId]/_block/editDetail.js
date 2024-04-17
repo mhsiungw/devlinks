@@ -1,6 +1,17 @@
 import Input from '@/components/input';
 import IconUploadImage from '@/images/icon-upload-image.svg';
 
+const getBackgroundImage = avatarUrl =>
+	avatarUrl
+		? `
+				linear-gradient(
+					rgba(0, 0, 0, 0.4), 
+					rgba(0, 0, 0, 0.4)
+				),
+				url("${avatarUrl.replace('server', 'localhost')}")
+			`
+		: null;
+
 export default function EditDetail({ profile }) {
 	const { avatarUrl, email, firstName, lastName } = profile;
 
@@ -24,12 +35,8 @@ export default function EditDetail({ profile }) {
 									className={`w-48 h-48 px-10 py-14 bg-light-purple flex flex-col items-center justify-end cursor-pointer`}
 									// TODO: fix image re-rerender on typeing
 									style={{
-										backgroundImage: `
-										linear-gradient(
-											rgba(0, 0, 0, 0.4), 
-											rgba(0, 0, 0, 0.4)
-										),
-										url("${avatarUrl.replace('server', 'localhost')}")`,
+										backgroundImage:
+											getBackgroundImage(avatarUrl),
 										backgroundSize: 'cover',
 										backgroundPosition: 'center'
 									}}

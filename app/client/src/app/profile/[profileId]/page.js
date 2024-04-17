@@ -20,14 +20,19 @@ export default async function ProfileEdit(props) {
 	if (!data) {
 		throw new Error(`Profile ID-${profileId} doesn't exist`);
 	}
+	const { links: _links } = data;
 
-	const dataWithId = update(data, {
-		links: {
-			$set: data.links.map(l => {
+	const links = _links
+		? _links.map(l => {
 				const id = uniqueId('server');
 				set(l, 'id', id);
 				return l;
-			})
+		  })
+		: [];
+
+	const dataWithId = update(data, {
+		links: {
+			$set: links
 		}
 	});
 

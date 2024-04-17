@@ -14,7 +14,7 @@ export default function LinkBar({ type, url }) {
 				{Icon && <Icon className='fill-white' />}
 				<span className='text-xs'>{title}</span>
 			</div>
-			<Link href={url}>
+			<Link href={url} prefetch={false}>
 				<IconArrowRight />
 			</Link>
 		</div>

@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+    db:
+        container_name: staging_database
+        image: 'postgres:latest'
+        restart: on-failure
+        environment:
+            - POSTGRES_PASSWORD=password
+            - PGUSER=postgres
+        volumes:
+            - db:/var/lib/postgresql/data
+
     client:
         build:
             context: ../../
@@ -15,3 +25,7 @@ services:
         image: minhsiung/devlinks.server.staging
         ports:
             - '3000:3000'
+
+volumes:
+    db:
+        driver: local

@@ -13,6 +13,19 @@ import IconYoutube from '@/images/icon-youtube.svg';
 import IconFrontendMentor from '@/images/icon-frontend-mentor.svg';
 import IconFreeCodeCamp from '@/images/icon-freecodecamp.svg';
 
+export function getClientUrl() {
+	switch (process?.env?.NEXT_PUBLIC_MODE) {
+		case 'development':
+			return 'http://localhost:3001';
+		case 'staging':
+			return 'http://localhost:3001';
+		case 'production':
+			return 'http://minstack/';
+		default:
+			return 'http://localhost:3001';
+	}
+}
+
 export function getAPIUrl() {
 	const componentType = process?.env?.IS_SERVER_FLAG ? 'server' : 'client';
 
@@ -22,7 +35,7 @@ export function getAPIUrl() {
 		case 'client':
 			return process.env.NEXT_PUBLIC_API_URL_FOR_CLIENT;
 		default:
-			return 'http://localhost:3000/';
+			return 'http://localhost:3000';
 	}
 }
 

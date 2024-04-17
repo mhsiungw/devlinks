@@ -1,9 +1,9 @@
-FROM node:20-alpine AS base
+FROM node:20 AS base
 
 
 FROM base AS deps
 
-RUN apk add --no-cache libc6-compat
+# RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
@@ -18,6 +18,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY ./app/server/ ./
 
-CMD ["npm", "start"]
+RUN npx dotenvx run --env-file=.env.staging -- node ./bin/db/seed
+
+CMD ["npm", "run", "staging"]
 
 

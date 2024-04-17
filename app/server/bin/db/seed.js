@@ -19,6 +19,20 @@ async function initDb() {
 		await pool.query('DROP TABLE IF EXISTS users CASCADE;');
 		await pool.query('DROP TABLE IF EXISTS profiles CASCADE;');
 		await pool.query('DROP TABLE IF EXISTS open_profiles CASCADE;');
+		await pool.query('DROP TABLE IF EXISTS session CASCADE;');
+
+		await pool.query(`
+			CREATE TABLE "session" (
+				"sid" varchar NOT NULL COLLATE "default",
+				"sess" json NOT NULL,
+				"expire" timestamp(6) NOT NULL
+			)
+			WITH (OIDS=FALSE);
+			
+			ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+			
+			CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+		`);
 
 		// users
 		await pool.query(

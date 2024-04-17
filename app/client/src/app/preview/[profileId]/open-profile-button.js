@@ -2,6 +2,7 @@
 
 import { openProfile } from '@/lib/actions/profile';
 import { showToast } from '@/components/toast/utils';
+import { getClientUrl } from '@/lib/utils';
 import Button from '@/components/button';
 
 export default function OpenProfileButton({ profileId }) {
@@ -10,9 +11,9 @@ export default function OpenProfileButton({ profileId }) {
 			onClick={async () => {
 				const openProfileId = await openProfile(profileId);
 
-				navigator.clipboard.writeText(
+				await navigator.clipboard.writeText(
 					// TODO: add getBaseURL
-					`http://localhost:3001/${openProfileId}`
+					`${getClientUrl()}/${openProfileId}`
 				);
 
 				showToast(null, 'The linked has been copied to clipboard');
