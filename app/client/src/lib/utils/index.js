@@ -110,3 +110,24 @@ export function getIconConfig(type) {
 
 	return config;
 }
+
+export function getImageDimension(file) {
+	return new Promise((resolve, reject) => {
+		const img = new Image();
+
+		img.src = URL.createObjectURL(file);
+
+		img.onload = () => {
+			const width = img.naturalWidth;
+			const height = img.naturalHeight;
+
+			URL.revokeObjectURL(img.src);
+
+			resolve({ width, height });
+		};
+
+		img.onerror = () => {
+			reject(new Error({ width: null, height: null, error: true }));
+		};
+	});
+}

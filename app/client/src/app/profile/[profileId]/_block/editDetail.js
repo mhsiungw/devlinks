@@ -57,6 +57,7 @@ export default function EditDetail({ profile }) {
 									className='hidden'
 									name='avatarFile'
 									type='file'
+									accept='image/jpg, image/png'
 								/>
 							</div>
 							<div className='text-xs px-6 break-words'>

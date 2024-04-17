@@ -3,25 +3,42 @@ import multer from 'multer';
 import path from 'path';
 import db from '../../db/index.js';
 
+const getImageStorageName = (userId, profileId, extension) =>
+	`${userId + profileId}.${Date.now()}${extension}`;
+
 const storage = multer.diskStorage({
 	destination(req, file, cb) {
 		cb(null, './public/images/');
 	},
-	filename(req, file, cb) {
+	async filename(req, file, cb) {
 		const {
 			params: { profileId },
 			user
 		} = req;
 
-		cb(null, user.id + profileId + path.extname(file.originalname)); // Appending extension
+		const fileName = getImageStorageName(
+			user.id,
+			profileId,
+			path.extname(file.originalname)
+		);
+
+		await db.query(
+			`
+				UPDATE profiles
+				SET
+						avatar_url = $1
+				WHERE profile_id = $2;
+			`,
+			[`http://server:3000/static/images/${fileName}`, profileId]
+		);
+
+		cb(null, fileName); // Appending extension
 	}
 });
 
 const upload = multer({
 	storage
 });
-
-// const upload = multer({  });
 
 const router = Router();
 
@@ -112,7 +129,6 @@ router.put('/:profileId', upload.any(), async (req, res, next) => {
 		}
 
 		const { firstName, lastName, email, links } = req.body;
-		const [avatar] = req.files;
 
 		await db.query(
 			`
@@ -127,22 +143,6 @@ router.put('/:profileId', upload.any(), async (req, res, next) => {
 			[firstName, lastName, email, links, profileId]
 		);
 
-		if (avatar?.size) {
-			await db.query(
-				`
-					UPDATE profiles
-					SET
-							avatar_url = $1
-					WHERE profile_id = $2;
-				`,
-				[
-					`http://server:3000/static/images/${
-						userId + profileId + path.extname(avatar.originalname)
-					}`,
-					profileId
-				]
-			);
-		}
 		res.json({ error: false, message: 'Profile Saved', data: null });
 	} catch (err) {
 		next(err);

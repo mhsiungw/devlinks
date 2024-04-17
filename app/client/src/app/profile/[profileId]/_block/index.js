@@ -11,12 +11,14 @@ import { showToast } from '@/components/toast/utils';
 import EditLinkBlock from '@/app/profile/[profileId]/_block/editLink';
 import EditDetail from '@/app/profile/[profileId]/_block/editDetail';
 import Illustration from '@/app/profile/[profileId]/_components/illustration';
+import { getImageDimension } from '@/lib/utils';
 
 export default function ProfileEditBlock({ profile: _profile }) {
 	const formRef = useRef();
 	const tab = useAppSelector(state => state.tab);
 
 	const [profile, setProfile] = useState(_profile);
+
 	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
 
 	const [state, formAction] = useFormState(
@@ -30,16 +32,34 @@ export default function ProfileEditBlock({ profile: _profile }) {
 		}
 	}, [state]);
 
-	const handleFormChange = e => {
+	const handleFormChange = async e => {
+		if (e.target.id === 'avatarFile') {
+			const { width, height } = await getImageDimension(
+				e.target.files[0]
+			);
+
+			if (width > 1024 || height > 1024) {
+				const dt = new DataTransfer();
+
+				if (profile?.avatarFile) {
+					dt.items.add(profile?.avatarFile);
+				}
+
+				e.target.value = '';
+
+				e.target.files = dt.files;
+
+				showToast(null, 'Image is too big!');
+				return;
+			}
+		}
+
 		const newState = new FormData(formRef.current)
 			.entries()
 			.filter(d => !d[0].includes('$ACTION_'))
 			.reduce((acc, [key, value]) => {
-				if (
-					e.target.id === 'avatarFile' &&
-					key === 'avatarFile' &&
-					value.size
-				) {
+				if (e.target.id === 'avatarFile' && key === 'avatarFile') {
+					acc.avatarFile = value;
 					acc.avatarUrl = URL.createObjectURL(value);
 				} else {
 					set(acc, key, value);
