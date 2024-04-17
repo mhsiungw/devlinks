@@ -20,7 +20,7 @@ export function getClientUrl() {
 		case 'staging':
 			return 'http://localhost:3001';
 		case 'production':
-			return 'http://minstack/';
+			return 'https://devlinks.minstack.lol';
 		default:
 			return 'http://localhost:3001';
 	}

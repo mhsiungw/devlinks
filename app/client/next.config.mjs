@@ -19,7 +19,7 @@ const nextConfig = {
 	},
 	experimental: {
 		serverActions: {
-			allowedOrigins: ['minstack.lol']
+			allowedOrigins: ['minstack.lol', 'devlinks.minstack.lol']
 		}
 	}
 };

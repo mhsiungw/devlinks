@@ -12,7 +12,6 @@ export default function OpenProfileButton({ profileId }) {
 				const openProfileId = await openProfile(profileId);
 
 				await navigator.clipboard.writeText(
-					// TODO: add getBaseURL
 					`${getClientUrl()}/${openProfileId}`
 				);
 
