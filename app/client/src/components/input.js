@@ -21,7 +21,7 @@ export default function Input({
 	return (
 		<div>
 			{renderLabel()}
-			<div className='flex items-center [&:has(input:focus)]:border-purple border border-border rounded-lg p-3 gap-2'>
+			<div className='flex items-center [&:has(input:focus)]:border-purple border border-border rounded-lg p-3 gap-2 bg-white'>
 				{Icon && <Icon />}
 				<input
 					className='outline-none w-full bg-transparent'

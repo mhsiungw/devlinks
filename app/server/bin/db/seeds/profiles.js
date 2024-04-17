@@ -7,15 +7,15 @@ export default [
 		avatarUrl: 'http://server:3000/static/images/11.jpg',
 		links: [
 			{
-				type: 'github',
+				type: '1',
 				url: 'http://github'
 			},
 			{
-				type: 'facebook',
+				type: '4',
 				url: 'http://facebook'
 			},
 			{
-				type: 'linkedin',
+				type: '8',
 				url: 'http://linkedin'
 			}
 		]

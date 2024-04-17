@@ -3,6 +3,7 @@ import { useDrop, useDrag } from 'react-dnd';
 import IconDragAndDrop from '@/images/icon-drag-and-drop.svg';
 import IconLink from '@/images/icon-link.svg';
 import Input from '@/components/input';
+import Select from '@/components/select';
 
 const dndType = 'draggable-item';
 
@@ -107,13 +108,7 @@ export default function LinkInput({
 					name={`links[${index}].id`}
 					value={id}
 				/>
-				<Input
-					label='Platform'
-					name={`links[${index}].type`}
-					type='text'
-					defaultValue={type}
-					placeholder='e.g. alex@email.com'
-				/>
+				<Select name={`links[${index}].type`} defaultValue={type} />
 				<Input
 					label='Link'
 					name={`links[${index}].url`}

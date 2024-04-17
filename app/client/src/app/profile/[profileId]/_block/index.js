@@ -60,7 +60,7 @@ export default function ProfileEditBlock({ profile: _profile }) {
 						noValidate
 						action={updateProfile.bind(null, profileId)}
 						ref={formRef}
-						onChange={handleFormChange}
+						onInput={handleFormChange}
 					>
 						<div className='flex flex-col gap-24'>
 							<div>
