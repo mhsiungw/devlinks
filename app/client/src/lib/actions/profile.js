@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { set } from 'lodash';
 import { getAPIUrl } from '../utils';
 
-export async function updateProfile(profileId, formData) {
+export async function updateProfile(profileId, _, formData) {
 	const sanitizedData = Array.from(formData)
 		.filter(d => !d[0].includes('$ACTION_'))
 		.reduce((acc, [key, value]) => {
@@ -33,9 +33,9 @@ export async function updateProfile(profileId, formData) {
 		}
 	});
 
-	const result = await res.json();
+	const { error, message, data } = await res.json();
 
-	return result;
+	return { error, message, data };
 }
 
 export async function openProfile(profileId) {

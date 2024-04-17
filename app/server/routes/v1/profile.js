@@ -91,7 +91,7 @@ router.get('/share/:profileId', async (req, res, next) => {
 			[userId, profileId]
 		);
 
-		res.json({ message: 'ok', data: { openProfileId } });
+		res.json({ error: false, message: 'ok', data: { openProfileId } });
 	} catch (err) {
 		next(err);
 	}
@@ -108,7 +108,7 @@ router.put('/:profileId', upload.any(), async (req, res, next) => {
 		);
 
 		if (!rows.length) {
-			throw new Error("profileId and userId don't match");
+			throw new Error("You don't own this profile!");
 		}
 
 		const { firstName, lastName, email, links } = req.body;
@@ -127,7 +127,7 @@ router.put('/:profileId', upload.any(), async (req, res, next) => {
 			[firstName, lastName, email, links, profileId]
 		);
 
-		if (avatar.size) {
+		if (avatar?.size) {
 			await db.query(
 				`
 					UPDATE profiles
@@ -143,7 +143,7 @@ router.put('/:profileId', upload.any(), async (req, res, next) => {
 				]
 			);
 		}
-		res.json({ message: 'ok' });
+		res.json({ error: false, message: 'Profile Saved', data: null });
 	} catch (err) {
 		next(err);
 	}

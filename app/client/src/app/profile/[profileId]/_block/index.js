@@ -1,22 +1,34 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useFormState } from 'react-dom';
 import update from 'immutability-helper';
 import { set } from 'lodash';
-import Button from '@/components/button';
-import EditLinkBlock from '@/app/profile/[profileId]/_block/editLink';
-import EditDetail from '@/app/profile/[profileId]/_block/editDetail';
 import { useAppSelector } from '@/lib/store/hooks';
 import { updateProfile } from '@/lib/actions/profile';
-import Illustration from '../_components/illustration';
+import Button from '@/components/button';
+import { showToast } from '@/components/toast/utils';
+import EditLinkBlock from '@/app/profile/[profileId]/_block/editLink';
+import EditDetail from '@/app/profile/[profileId]/_block/editDetail';
+import Illustration from '@/app/profile/[profileId]/_components/illustration';
 
 export default function ProfileEditBlock({ profile: _profile }) {
 	const formRef = useRef();
 	const tab = useAppSelector(state => state.tab);
 
 	const [profile, setProfile] = useState(_profile);
-
 	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
+
+	const [state, formAction] = useFormState(
+		updateProfile.bind(null, profileId),
+		null
+	);
+
+	useEffect(() => {
+		if (state?.message) {
+			showToast(null, state.message);
+		}
+	}, [state]);
 
 	const handleFormChange = e => {
 		const newState = new FormData(formRef.current)
@@ -58,8 +70,8 @@ export default function ProfileEditBlock({ profile: _profile }) {
 				<div className='bg-white p-10 absolute top-0 bottom-0 left-0 right-0 overflow-y-auto'>
 					<form
 						noValidate
-						action={updateProfile.bind(null, profileId)}
 						ref={formRef}
+						action={formAction}
 						onInput={handleFormChange}
 					>
 						<div className='flex flex-col gap-24'>
