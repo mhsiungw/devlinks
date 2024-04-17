@@ -77,6 +77,7 @@ export default function EditLinkBlock({ links = [], onChange }) {
 				<button
 					className='w-full text-purple font-medium rounded-lg p-3 border border-purple'
 					disabled={links.length === 5}
+					type='button'
 					onClick={addLink}
 				>
 					<span>+ Add new link</span>
