@@ -4,17 +4,17 @@ import SignupForm from './signup-form';
 
 export default function Signup() {
 	return (
-		<div className='flex justify-center items-center h-full'>
-			<div className='w-1/3 min-w-[425px]'>
-				<div className='flex justify-center mb-14'>
+		<div className='flex justify-center lg:items-center sm:items-start h-full'>
+			<div className='w-1/3 md:min-w-[425px] sm:min-w-[275px]'>
+				<div className='flex justify-center md:mb-14 sm:m-4'>
 					<LogoDevlinksLarge />
 				</div>
-				<div className='bg-white p-10 rounded-xl'>
+				<div className='md:bg-white md:p-10 rounded-xl'>
 					<div className='mb-10'>
-						<h2 className='text-dark-gray text-3xl font-bold mb-2'>
+						<h2 className='text-dark-gray sm:text-2xl md:text-3xl font-bold mb-2'>
 							Create account
 						</h2>
-						<div className='text-gray text-base'>
+						<div className='text-gray md:text-base'>
 							{"Let's"} get you started sharing your links!
 						</div>
 					</div>

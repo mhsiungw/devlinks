@@ -5,13 +5,13 @@ import LoginForm from '@/app/login/login-form';
 export default async function Login() {
 	return (
 		<div className='flex justify-center items-center h-full'>
-			<div className='w-1/3 min-w-[425px] max-w-[476px]'>
-				<div className='flex justify-center mb-14'>
+			<div className='w-1/3 md:min-w-[425px] sm:min-w-[275px]'>
+				<div className='flex justify-center md:mb-14 sm:m-4'>
 					<LogoDevlinksLarge />
 				</div>
-				<div className='bg-white p-10 rounded-xl'>
+				<div className='md:bg-white md:p-10 rounded-xl'>
 					<div className='mb-10'>
-						<h2 className='text-dark-gray text-3xl font-bold mb-2'>
+						<h2 className='text-dark-gray sm:text-2xl md:text-3xl font-bold mb-2'>
 							Login
 						</h2>
 						<div className='text-grey text-base'>
@@ -19,7 +19,7 @@ export default async function Login() {
 						</div>
 					</div>
 					<LoginForm />
-					<div className='text-base mt-6 flex justify-center'>
+					<div className='text-base mt-6 flex justify-center sm:flex-col md:flex-row'>
 						<span className='text-gray mr-1'>
 							Don&apos; have an account?
 						</span>
