@@ -4,6 +4,7 @@ import ProfileEditBlock from '@/app/profile/[profileId]/_block';
 import { getAPIUrl } from '@/lib/utils';
 import update from 'immutability-helper';
 import { set, uniqueId } from 'lodash';
+import { redirect } from 'next/navigation';
 
 export default async function ProfileEdit(props) {
 	const { profileId } = props.params;
@@ -14,6 +15,10 @@ export default async function ProfileEdit(props) {
 			Cookie: cookies().toString()
 		}
 	});
+
+	if (res.status === 401) {
+		redirect('/login');
+	}
 
 	const { data } = await res.json();
 
