@@ -77,7 +77,7 @@ export default function ProfileEditBlock({ profile: _profile }) {
 
 	return (
 		<div className='flex flex-1 gap-6 w-full'>
-			<div className='basis-[38%]'>
+			<div className='basis-[38%] hidden md:block'>
 				<Illustration
 					avatarUrl={avatarUrl}
 					firstName={firstName}

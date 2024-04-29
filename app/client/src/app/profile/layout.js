@@ -23,22 +23,22 @@ export default function ProfileLayout({ children }) {
 	return (
 		<div className='p-6 h-full flex flex-col'>
 			<div className='pb-6'>
-				<div className='flex justify-between p-6 bg-white rounded-xl'>
+				<div className='flex justify-between items-center p-6 bg-white rounded-xl'>
 					<LogoDevlinksLarge />
 					{/* TODO: start: make it a client component */}
 					<div className='flex'>
-						<div className='min-w-28'>
+						<div className='md:min-w-28'>
 							<button
 								className={`w-full text-grey rounded-lg p-3 flex justify-center items-center gap-2 hover:bg-light-purple hover:text-purple hover:stroke-purple font-medium 
 									${returnClassName(tab === 'edit-link')}`}
 								onClick={() => dispatch(toggle())}
 							>
 								<IconLink />
-								<span>Links</span>
+								<span className='hidden md:block'>Links</span>
 							</button>
 						</div>
 
-						<div className='min-w-28'>
+						<div className='md:min-w-28'>
 							<button
 								className={`w-full text-grey rounded-lg p-3 flex justify-center items-center gap-2 hover:bg-light-purple hover:text-purple hover:stroke-purple font-medium ${returnClassName(
 									tab === 'edit-detail'
@@ -46,7 +46,9 @@ export default function ProfileLayout({ children }) {
 								onClick={() => dispatch(toggle())}
 							>
 								<IconProfileDetailsHeader />
-								<span>Profile Details</span>
+								<span className='hidden md:block'>
+									Profile Details
+								</span>
 							</button>
 						</div>
 					</div>
