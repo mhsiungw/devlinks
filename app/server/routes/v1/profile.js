@@ -2,42 +2,16 @@ import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import db from '../../db/index.js';
+import uploadS3 from '../../services/upload-s3/index.js';
 
 const getImageStorageName = (userId, profileId, extension) =>
 	`${userId + profileId}.${Date.now()}${extension}`;
 
-const storage = multer.diskStorage({
-	destination(req, file, cb) {
-		cb(null, './public/images/');
-	},
-	async filename(req, file, cb) {
-		const {
-			params: { profileId },
-			user
-		} = req;
-
-		const fileName = getImageStorageName(
-			user.id,
-			profileId,
-			path.extname(file.originalname)
-		);
-
-		await db.query(
-			`
-				UPDATE profiles
-				SET
-						avatar_url = $1
-				WHERE profile_id = $2;
-			`,
-			[`http://server:3000/static/images/${fileName}`, profileId]
-		);
-
-		cb(null, fileName); // Appending extension
-	}
-});
-
 const upload = multer({
-	storage
+	storage: multer.memoryStorage(),
+	limits: {
+		fileSize: 5 * 1024 * 1024 // limit file size to 5MB
+	}
 });
 
 const router = Router();
@@ -114,39 +88,61 @@ router.get('/share/:profileId', async (req, res, next) => {
 	}
 });
 
-router.put('/:profileId', upload.any(), async (req, res, next) => {
-	const userId = req?.user?.id;
-	const { profileId } = req.params;
+router.put(
+	'/:profileId',
+	upload.single('avatarFile'),
+	async (req, res, next) => {
+		const userId = req?.user?.id;
+		const { profileId } = req.params;
 
-	try {
-		const { rows } = await db.query(
-			`SELECT * FROM profiles WHERE profile_id = $1 AND user_id = $2`,
-			[profileId, userId]
-		);
+		console.log('req.body', req.body, req.file);
 
-		if (!rows.length) {
-			throw new Error("You don't own this profile!");
+		const params = {
+			Bucket: 'minstack.lol',
+			Key: getImageStorageName(
+				userId,
+				profileId,
+				path.extname(req.file.originalname)
+			), // Specify the key (name) under which the file will be stored in S3
+			Body: req.file.buffer, // Specify the file data
+			ContentType: `image/${path
+				.extname(req.file.originalname)
+				.replace('.', '')}`
+		};
+
+		try {
+			const { rows } = await db.query(
+				`SELECT * FROM profiles WHERE profile_id = $1 AND user_id = $2`,
+				[profileId, userId]
+			);
+
+			if (!rows.length) {
+				throw new Error("You don't own this profile!");
+			}
+
+			const avatarUrl = await uploadS3(params);
+
+			const { firstName, lastName, email, links } = req.body;
+
+			await db.query(
+				`
+					UPDATE profiles
+					SET
+							first_name = $1,
+							last_name = $2,
+							email = $3,
+							links = $4,
+							avatar_url = $5
+					WHERE profile_id = $6;
+				`,
+				[firstName, lastName, email, links, avatarUrl, profileId]
+			);
+
+			res.json({ error: false, message: 'Profile Saved', data: null });
+		} catch (err) {
+			next(err);
 		}
-
-		const { firstName, lastName, email, links } = req.body;
-
-		await db.query(
-			`
-				UPDATE profiles
-				SET
-						first_name = $1,
-						last_name = $2,
-						email = $3,
-						links = $4
-				WHERE profile_id = $5;
-			`,
-			[firstName, lastName, email, links, profileId]
-		);
-
-		res.json({ error: false, message: 'Profile Saved', data: null });
-	} catch (err) {
-		next(err);
 	}
-});
+);
 
 export default router;

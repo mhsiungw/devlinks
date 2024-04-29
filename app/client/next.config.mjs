@@ -11,9 +11,8 @@ const nextConfig = {
 	images: {
 		remotePatterns: [
 			{
-				protocol: 'http',
-				hostname: 'server',
-				port: '3000'
+				protocol: 'https',
+				hostname: 's3.ap-southeast-2.amazonaws.com'
 			}
 		]
 	},
