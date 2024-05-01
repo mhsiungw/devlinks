@@ -12,7 +12,11 @@ async function initDb() {
 		host: process.env.PGHOST,
 		user: process.env.PGUSER,
 		password: process.env.POSTGRES_PASSWORD,
-		port: process.env.PGPORT
+		port: process.env.PGPORT,
+		ssl: {
+			require: process.env.PGSSL,
+			rejectUnauthorized: false
+		}
 	});
 
 	try {
