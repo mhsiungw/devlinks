@@ -5,5 +5,5 @@ dockercompose.yaml
 .vscode
 .eslintrc.cjs
 .gitignore
-.env.local
 docker
+**/.env.*
