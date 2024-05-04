@@ -15,16 +15,11 @@ export default app => {
 		}),
 		cookie: {
 			sameSite: false,
-			secure: process.env.mode === 'production',
+			secure: false,
 			maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 			httpOnly: true
 		}
 	};
-
-	if (process.env.mode === 'production') {
-		app.set('trust proxy', 1);
-		sess.cookie.secure = true;
-	}
 
 	app.use(session(sess));
 };
