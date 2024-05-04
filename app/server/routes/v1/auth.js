@@ -18,7 +18,7 @@ router.post(
 			`
 			SELECT profile_id "profileId" FROM profiles
 			WHERE user_id = $1
-		`,
+			`,
 			[req.user.id]
 		);
 
