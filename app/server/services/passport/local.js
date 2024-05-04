@@ -12,8 +12,9 @@ export default new LocalStrategy(
 				'SELECT user_id "userId", password FROM users WHERE email = $1',
 				[email]
 			);
+
 			if (!rows.length) {
-				cb(null, false, {
+				return cb(null, false, {
 					message: 'Incorrect username or password.'
 				});
 			}

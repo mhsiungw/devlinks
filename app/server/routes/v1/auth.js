@@ -23,21 +23,20 @@ router.post(
 		);
 
 		// handle success
-		res.json({
+		return res.json({
 			error: false,
 			message: 'ok',
 			data: { userId: req.user.id, profileId }
 		});
 	},
 	// eslint-disable-next-line no-unused-vars
-	(_, req, res, __) => {
+	(_, req, res, next) =>
 		// Handle error
 		res.status(401).json({
 			error: true,
 			message: req.session.messages[0],
 			data: null
-		});
-	}
+		})
 );
 
 router.get('/logout', (req, res, next) => {

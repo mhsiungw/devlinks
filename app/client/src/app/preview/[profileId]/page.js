@@ -56,7 +56,7 @@ export default async function Preview(props) {
 					<div className='bg-white'>{email}</div>
 				</div>
 				<div className='space-y-5'>
-					{links.map(({ type, url }) => (
+					{links?.map(({ type, url }) => (
 						<div key={type}>
 							<LinkBar type={type} url={url} />
 						</div>
