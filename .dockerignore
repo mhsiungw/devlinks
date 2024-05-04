@@ -6,4 +6,3 @@ dockercompose.yaml
 .eslintrc.cjs
 .gitignore
 docker
-**/.env.*

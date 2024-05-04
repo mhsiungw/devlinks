@@ -95,21 +95,6 @@ router.put(
 		const userId = req?.user?.id;
 		const { profileId } = req.params;
 
-		console.log('req.body', req.body, req.file);
-
-		const params = {
-			Bucket: 'minstack.lol',
-			Key: getImageStorageName(
-				userId,
-				profileId,
-				path.extname(req.file.originalname)
-			), // Specify the key (name) under which the file will be stored in S3
-			Body: req.file.buffer, // Specify the file data
-			ContentType: `image/${path
-				.extname(req.file.originalname)
-				.replace('.', '')}`
-		};
-
 		try {
 			const { rows } = await db.query(
 				`SELECT * FROM profiles WHERE profile_id = $1 AND user_id = $2`,
@@ -120,8 +105,6 @@ router.put(
 				throw new Error("You don't own this profile!");
 			}
 
-			const avatarUrl = await uploadS3(params);
-
 			const { firstName, lastName, email, links } = req.body;
 
 			await db.query(
@@ -131,12 +114,38 @@ router.put(
 							first_name = $1,
 							last_name = $2,
 							email = $3,
-							links = $4,
-							avatar_url = $5
-					WHERE profile_id = $6;
+							links = $4
+					WHERE profile_id = $5;
 				`,
-				[firstName, lastName, email, links, avatarUrl, profileId]
+				[firstName, lastName, email, links, profileId]
 			);
+
+			if (req.file) {
+				const params = {
+					Bucket: 'minstack.lol',
+					Key: getImageStorageName(
+						userId,
+						profileId,
+						path.extname(req.file?.originalname)
+					), // Specify the key (name) under which the file will be stored in S3
+					Body: req.file.buffer, // Specify the file data
+					ContentType: `image/${path
+						.extname(req.file.originalname)
+						.replace('.', '')}`
+				};
+
+				const avatarUrl = await uploadS3(params);
+
+				await db.query(
+					`
+						UPDATE profiles
+						SET
+							avatar_url = $1
+						WHERE profile_id = $2;
+					`,
+					[avatarUrl, profileId]
+				);
+			}
 
 			res.json({ error: false, message: 'Profile Saved', data: null });
 		} catch (err) {

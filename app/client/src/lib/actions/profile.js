@@ -25,17 +25,24 @@ export async function updateProfile(profileId, _, formData) {
 		}
 	});
 
-	const res = await fetch(`${getAPIUrl()}/profile/${[profileId]}`, {
-		method: 'PUT',
-		body: newFormData,
-		headers: {
-			Cookie: cookies().toString()
-		}
-	});
+	try {
+		const res = await fetch(`${getAPIUrl()}/profile/${[profileId]}`, {
+			method: 'PUT',
+			body: newFormData,
+			headers: {
+				Cookie: cookies().toString()
+			}
+		});
 
-	const { error, message, data } = await res.json();
-
-	return { error, message, data };
+		const { error, message, data } = await res.json();
+		return { error, message, data };
+	} catch (err) {
+		return {
+			error: true,
+			message: 'Something went wrong',
+			data: null
+		};
+	}
 }
 
 export async function openProfile(profileId) {
