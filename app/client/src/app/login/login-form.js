@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useFormState } from 'react-dom';
 import { z } from 'zod';
 import { useZorm } from 'react-zorm';
-import { login } from '@/lib/actions/auth';
+import { getAPIUrl } from '@/lib/utils';
 import { showToast } from '@/components/toast/utils';
+import { useRouter } from 'next/navigation';
 import IconEmail from '@/images/icon-email.svg';
 import IconPassword from '@/images/icon-password.svg';
 import Form from '@/components/form';
@@ -19,17 +18,40 @@ const Schema = z.object({
 });
 
 export default function LoginForm() {
-	const zo = useZorm('login', Schema);
-	const [state, formAction] = useFormState(login, null);
+	const router = useRouter();
+	const zo = useZorm('login', Schema, {
+		onValidSubmit: async e => {
+			e.preventDefault();
 
-	useEffect(() => {
-		if (state) {
-			showToast(null, state.message);
+			try {
+				const response = await fetch(
+					`${getAPIUrl()}/auth/login/password`,
+					{
+						method: 'POST',
+						body: JSON.stringify(e.data),
+						credentials: 'include',
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					}
+				);
+
+				const { data, message } = await response.json();
+				if (!response.ok) {
+					throw Error({ message });
+				}
+
+				const { profileId } = data;
+
+				router.push(`/profile/${profileId}`);
+			} catch (err) {
+				showToast(null, err.message);
+			}
 		}
-	}, [state]);
+	});
 
 	return (
-		<Form action={formAction} ref={zo.ref}>
+		<Form ref={zo.ref}>
 			<div className='space-y-6'>
 				<Input
 					label='Email address'
