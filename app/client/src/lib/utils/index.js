@@ -1,3 +1,5 @@
+import { set } from 'lodash';
+
 import IconGithub from '@/images/icon-github.svg';
 import IconGitlab from '@/images/icon-gitlab.svg';
 import IconHashnode from '@/images/icon-hashnode.svg';
@@ -143,4 +145,58 @@ export function getImageDimension(file) {
 			reject(new Error({ width: null, height: null, error: true }));
 		};
 	});
+}
+
+export function getBase64(file) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = () => {
+			resolve(reader.result);
+		};
+		reader.onerror = reject;
+	});
+}
+
+export function dataURLtoBlob(dataurl) {
+	const arr = dataurl?.split(',');
+
+	if (!arr) {
+		return null;
+	}
+
+	const mime = arr[0].match(/:(.*?);/)[1];
+	const bstr = atob(arr[1]);
+	let n = bstr.length;
+	const u8arr = new Uint8Array(n);
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([u8arr], {
+		type: mime
+	});
+}
+
+export function getStorageProfile() {
+	if (typeof window !== 'undefined') {
+		const profile = JSON.parse(localStorage?.getItem('profile'));
+
+		if (!profile) {
+			return null;
+		}
+
+		const blob = dataURLtoBlob(profile.avatarFile);
+
+		if (blob) {
+			set(
+				profile,
+				'avatarFile',
+				new File([blob], 'image', { type: blob.type })
+			);
+		}
+
+		return profile;
+	}
+
+	return null;
 }

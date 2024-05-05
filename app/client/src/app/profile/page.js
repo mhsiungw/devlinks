@@ -1,17 +1,16 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useFormState } from 'react-dom';
 import update from 'immutability-helper';
-import { isArray, mergeWith, set } from 'lodash';
+import { set } from 'lodash';
+import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/lib/store/hooks';
-import { updateProfile } from '@/lib/actions/profile';
 import Button from '@/components/button';
 import { showToast } from '@/components/toast/utils';
 import EditLinkBlock from '@/app/profile/[profileId]/_block/editLink';
 import EditDetail from '@/app/profile/[profileId]/_block/editDetail';
 import Illustration from '@/app/profile/[profileId]/_components/illustration';
-import { getImageDimension, getStorageProfile } from '@/lib/utils';
+import { getImageDimension, getBase64, getStorageProfile } from '@/lib/utils';
 
 const defaultProfile = {
 	profileId: null,
@@ -22,45 +21,22 @@ const defaultProfile = {
 	links: []
 };
 
-export default function ProfileEditBlock({
-	profile: _profile = defaultProfile
-}) {
+export default function Profile({ profile: _profile = defaultProfile }) {
 	const formRef = useRef();
 	const tab = useAppSelector(state => state.tab);
+	const router = useRouter();
 
 	const [profile, setProfile] = useState(_profile);
 
-	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
-
-	const [state, formAction] = useFormState(
-		updateProfile.bind(null, profileId),
-		null
-	);
+	const { links, firstName, lastName, email, avatarUrl } = profile;
 
 	useEffect(() => {
 		const storageProfile = getStorageProfile();
 
 		if (storageProfile) {
-			setProfile(
-				mergeWith(_profile, storageProfile, (objVal, srcVal) => {
-					if (isArray(objVal)) {
-						return objVal.concat(srcVal);
-					}
-
-					if (!objVal) {
-						return srcVal;
-					}
-					return objVal;
-				})
-			);
+			setProfile(storageProfile);
 		}
 	}, []);
-
-	useEffect(() => {
-		if (state?.message) {
-			showToast(null, state.message);
-		}
-	}, [state]);
 
 	const handleFormChange = async e => {
 		if (e.target.id === 'avatarFile') {
@@ -121,8 +97,8 @@ export default function ProfileEditBlock({
 					<form
 						noValidate
 						ref={formRef}
-						action={formAction}
 						onInput={handleFormChange}
+						onSubmit={e => e.preventDefault()}
 					>
 						<div className='flex flex-col gap-24'>
 							<div>
@@ -156,7 +132,50 @@ export default function ProfileEditBlock({
 							</div>
 							<div className='border-t border-border flex justify-end py-10'>
 								<div className='w-20'>
-									<Button>Save</Button>
+									<Button
+										onClick={async () => {
+											const newProfile = {
+												...profile
+											};
+
+											if (
+												profile.avatarFile instanceof
+													File &&
+												profile.avatarFile.size !== 0
+											) {
+												const imageBase64 =
+													await getBase64(
+														profile.avatarFile
+													);
+
+												set(
+													newProfile,
+													'avatarFile',
+													imageBase64
+												);
+												set(
+													newProfile,
+													'avatarUrl',
+													imageBase64
+												);
+											} else {
+												set(
+													newProfile,
+													'avatarFile',
+													profile.avatarUrl
+												);
+											}
+
+											localStorage.setItem(
+												'profile',
+												JSON.stringify(newProfile)
+											);
+
+											router.push('signup');
+										}}
+									>
+										Save
+									</Button>
 								</div>
 							</div>
 						</div>

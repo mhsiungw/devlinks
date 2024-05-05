@@ -35,12 +35,13 @@ export async function updateProfile(profileId, _, formData) {
 		});
 
 		const { error, message, data } = await res.json();
+
 		return { error, message, data };
 	} catch (err) {
 		return {
 			error: true,
 			message: 'Something went wrong',
-			data: null
+			data: newFormData
 		};
 	}
 }
