@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { cookies } from 'next/headers';
 import LinkBar from '@/components/link-bar';
 import { getAPIUrl } from '@/lib/utils';
+import { redirect } from 'next/navigation';
 import OpenProfileButton from './open-profile-button';
 
 export default async function Preview(props) {
@@ -15,6 +16,10 @@ export default async function Preview(props) {
 			Cookie: cookies().toString()
 		}
 	});
+
+	if (res.status === 401) {
+		redirect('/login');
+	}
 
 	const { data } = await res.json();
 
