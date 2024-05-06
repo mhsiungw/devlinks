@@ -1,8 +1,8 @@
 import update from 'immutability-helper';
 import { useCallback } from 'react';
-import LinkInput from '@/app/profile/[profileId]/_components/link-input';
 import { uniqueId } from 'lodash';
 import DraggableContainer from '@/components/draggable/draggable-container';
+import LinkInput from '../_components/link-input';
 
 export default function EditLinkBlock({ links = [], onChange }) {
 	const addLink = useCallback(() => {

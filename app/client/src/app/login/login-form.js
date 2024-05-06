@@ -2,11 +2,13 @@
 
 import { z } from 'zod';
 import { useZorm } from 'react-zorm';
-import { getAPIUrl } from '@/lib/utils';
-import { showToast } from '@/components/toast/utils';
 import { useRouter } from 'next/navigation';
+import { getAPIUrl } from '@/lib/utils';
+import { updateUser } from '@/lib/store/features/auth/authSlice';
+import { useAppDispatch } from '@/lib/store/hooks';
 import IconEmail from '@/images/icon-email.svg';
 import IconPassword from '@/images/icon-password.svg';
+import { showToast } from '@/components/toast/utils';
 import Form from '@/components/form';
 import Input from '@/components/input';
 import SubmitButton from '@/components/submit-button';
@@ -18,6 +20,7 @@ const Schema = z.object({
 });
 
 export default function LoginForm() {
+	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const zo = useZorm('login', Schema, {
 		onValidSubmit: async e => {
@@ -38,10 +41,12 @@ export default function LoginForm() {
 
 				const { data, message } = await response.json();
 				if (!response.ok) {
-					throw Error({ message });
+					throw new Error(message);
 				}
 
 				const { profileId } = data;
+
+				dispatch(updateUser({ user: data }));
 
 				router.push(`/profile/${profileId}`);
 			} catch (err) {

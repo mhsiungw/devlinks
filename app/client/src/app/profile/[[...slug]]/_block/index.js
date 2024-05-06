@@ -1,16 +1,23 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useFormState } from 'react-dom';
 import update from 'immutability-helper';
-import { set } from 'lodash';
-import { useRouter } from 'next/navigation';
+import { isArray, mergeWith, set } from 'lodash';
 import { useAppSelector } from '@/lib/store/hooks';
+import { openAuthModal } from '@/lib/store/features/auth-modal/authModalSlice';
+import { updateProfile } from '@/lib/actions/profile';
 import Button from '@/components/button';
 import { showToast } from '@/components/toast/utils';
-import EditLinkBlock from '@/app/profile/[profileId]/_block/editLink';
-import EditDetail from '@/app/profile/[profileId]/_block/editDetail';
-import Illustration from '@/app/profile/[profileId]/_components/illustration';
-import { getImageDimension, getBase64, getStorageProfile } from '@/lib/utils';
+import {
+	getImageDimension,
+	getStorageProfile,
+	storeProfileToLocalStorage
+} from '@/lib/utils';
+import { useDispatch } from 'react-redux';
+import Illustration from '../_components/illustration';
+import EditLinkBlock from './editLink';
+import EditDetail from './editDetail';
 
 const defaultProfile = {
 	profileId: null,
@@ -21,22 +28,47 @@ const defaultProfile = {
 	links: []
 };
 
-export default function Profile({ profile: _profile = defaultProfile }) {
+export default function ProfileEditBlock({
+	profile: _profile = defaultProfile
+}) {
 	const formRef = useRef();
-	const tab = useAppSelector(state => state.tab);
-	const router = useRouter();
+	const tab = useAppSelector(({ profile }) => profile?.tab);
+	const dispatch = useDispatch();
 
 	const [profile, setProfile] = useState(_profile);
 
-	const { links, firstName, lastName, email, avatarUrl } = profile;
+	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
+
+	const [state, formAction] = useFormState(
+		updateProfile.bind(null, profileId),
+		null
+	);
 
 	useEffect(() => {
 		const storageProfile = getStorageProfile();
 
 		if (storageProfile) {
-			setProfile(storageProfile);
+			const newProfile = mergeWith(
+				_profile,
+				storageProfile,
+				(objVal, srcVal) => {
+					if (isArray(objVal)) {
+						return objVal.concat(srcVal);
+					}
+
+					return objVal || srcVal;
+				}
+			);
+
+			setProfile({ ...newProfile });
 		}
 	}, []);
+
+	useEffect(() => {
+		if (state?.message) {
+			showToast(null, state.message);
+		}
+	}, [state]);
 
 	const handleFormChange = async e => {
 		if (e.target.id === 'avatarFile') {
@@ -97,8 +129,8 @@ export default function Profile({ profile: _profile = defaultProfile }) {
 					<form
 						noValidate
 						ref={formRef}
+						action={formAction}
 						onInput={handleFormChange}
-						onSubmit={e => e.preventDefault()}
 					>
 						<div className='flex flex-col gap-24'>
 							<div>
@@ -134,44 +166,12 @@ export default function Profile({ profile: _profile = defaultProfile }) {
 								<div className='w-20'>
 									<Button
 										onClick={async () => {
-											const newProfile = {
-												...profile
-											};
-
-											if (
-												profile.avatarFile instanceof
-													File &&
-												profile.avatarFile.size !== 0
-											) {
-												const imageBase64 =
-													await getBase64(
-														profile.avatarFile
-													);
-
-												set(
-													newProfile,
-													'avatarFile',
-													imageBase64
+											if (!profileId) {
+												storeProfileToLocalStorage(
+													profile
 												);
-												set(
-													newProfile,
-													'avatarUrl',
-													imageBase64
-												);
-											} else {
-												set(
-													newProfile,
-													'avatarFile',
-													profile.avatarUrl
-												);
+												dispatch(openAuthModal());
 											}
-
-											localStorage.setItem(
-												'profile',
-												JSON.stringify(newProfile)
-											);
-
-											router.push('signup');
 										}}
 									>
 										Save

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import LogoDevlinksLarge from '@/images/logo-devlinks-large.svg';
@@ -7,6 +8,7 @@ import IconLink from '@/images/icon-link.svg';
 import IconProfileDetailsHeader from '@/images/icon-profile-details-header.svg';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { toggle } from '@/lib/store/features/profile/profileSlice';
+import AuthModal from '@/components/auth-modal';
 
 const returnClassName = shouldReturn =>
 	shouldReturn
@@ -16,8 +18,10 @@ stroke-purple`
 		: null;
 
 export default function ProfileLayout({ children }) {
+	const dialogRef = useRef(null);
 	const dispatch = useAppDispatch();
-	const tab = useAppSelector(state => state?.tab);
+	const tab = useAppSelector(({ profile }) => profile?.tab);
+
 	const pathName = usePathname();
 
 	return (
@@ -64,6 +68,7 @@ export default function ProfileLayout({ children }) {
 				</div>
 			</div>
 			{children}
+			<AuthModal />
 		</div>
 	);
 }

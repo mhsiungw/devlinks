@@ -1,13 +1,17 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import ProfileEditBlock from '@/app/profile/[profileId]/_block';
 import { getAPIUrl } from '@/lib/utils';
 import update from 'immutability-helper';
 import { set, uniqueId } from 'lodash';
 import { redirect } from 'next/navigation';
+import ProfileEditBlock from './_block';
 
-export default async function ProfileEdit(props) {
-	const { profileId } = props.params;
+export default async function Profile(props) {
+	const { slug: [profileId] = [null] } = props.params;
+
+	if (!profileId) {
+		return <ProfileEditBlock />;
+	}
 
 	const res = await fetch(`${getAPIUrl()}/profile/${profileId}`, {
 		method: 'GET',
