@@ -1,6 +1,5 @@
 'use client';
 
-import { useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import LogoDevlinksLarge from '@/images/logo-devlinks-large.svg';
@@ -18,7 +17,6 @@ stroke-purple`
 		: null;
 
 export default function ProfileLayout({ children }) {
-	const dialogRef = useRef(null);
 	const dispatch = useAppDispatch();
 	const tab = useAppSelector(({ profile }) => profile?.tab);
 
