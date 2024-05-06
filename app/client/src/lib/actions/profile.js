@@ -5,6 +5,10 @@ import { set } from 'lodash';
 import { getAPIUrl } from '../utils';
 
 export async function updateProfile(profileId, _, formData) {
+	if (!profileId) {
+		return null;
+	}
+
 	const sanitizedData = Array.from(formData)
 		.filter(d => !d[0].includes('$ACTION_'))
 		.reduce((acc, [key, value]) => {
