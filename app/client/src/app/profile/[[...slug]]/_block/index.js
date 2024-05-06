@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import update from 'immutability-helper';
-import { set } from 'lodash';
+import { isArray, mergeWith, set } from 'lodash';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { openAuthModal } from '@/lib/store/features/auth-modal/authModalSlice';
 import { updateProfile } from '@/lib/actions/profile';
@@ -56,7 +56,29 @@ export default function ProfileEditBlock({
 	useEffect(() => {
 		const storageProfile = getStorageProfile();
 
-		setProfile(() => update(storageProfile, { $merge: _profile }));
+		if (storageProfile) {
+			setProfile(() =>
+				update(
+					{},
+					{
+						$merge: mergeWith(
+							_profile,
+							storageProfile,
+							(objVal, srcVal) => {
+								if (isArray(objVal) && !objVal.length) {
+									return srcVal;
+								}
+
+								if (!objVal) {
+									return srcVal;
+								}
+								return objVal;
+							}
+						)
+					}
+				)
+			);
+		}
 	}, [_profile]);
 
 	useEffect(() => {
