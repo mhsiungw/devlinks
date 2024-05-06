@@ -13,8 +13,8 @@ export default function Auth({ children }) {
 	useEffect(() => {
 		fetch(`${getAPIUrl()}/auth/login/pin`, { credentials: 'include' })
 			.then(res => res.json())
-			.then(({ data: { userId = null, profileId = null } }) => {
-				dispatch(updateUser({ userId, profileId }));
+			.then(({ data: { user } }) => {
+				dispatch(updateUser({ user }));
 			});
 	}, [pathName, dispatch]);
 

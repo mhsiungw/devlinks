@@ -1,12 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+
 import LogoDevlinksLarge from '@/images/logo-devlinks-large.svg';
 import IconLink from '@/images/icon-link.svg';
 import IconProfileDetailsHeader from '@/images/icon-profile-details-header.svg';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { toggle } from '@/lib/store/features/profile/profileSlice';
+import { openAuthModal } from '@/lib/store/features/auth-modal/authModalSlice';
 import AuthModal from '@/components/auth-modal';
 
 const returnClassName = shouldReturn =>
@@ -19,8 +20,8 @@ stroke-purple`
 export default function ProfileLayout({ children }) {
 	const dispatch = useAppDispatch();
 	const tab = useAppSelector(({ profile }) => profile?.tab);
-
-	const pathName = usePathname();
+	const user = useAppSelector(({ auth }) => auth?.user);
+	const router = useRouter();
 
 	return (
 		<div className='p-6 h-full flex flex-col'>
@@ -57,11 +58,19 @@ export default function ProfileLayout({ children }) {
 					{/* TODO: end */}
 
 					<div className='w-28'>
-						<Link href={pathName.replace('profile', 'preview')}>
-							<button className='w-full text-purple font-medium rounded-lg p-3 border border-purple'>
-								<span>Preview</span>
-							</button>
-						</Link>
+						<button
+							onClick={() => {
+								const profileId = user?.profileId;
+								if (!profileId) {
+									dispatch(openAuthModal());
+									return;
+								}
+								router.push(`/preview/${profileId}`);
+							}}
+							className='w-full text-purple font-medium rounded-lg p-3 border border-purple'
+						>
+							<span>Preview</span>
+						</button>
 					</div>
 				</div>
 			</div>

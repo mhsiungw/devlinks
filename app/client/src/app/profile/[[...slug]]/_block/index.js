@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
+import { useRouter } from 'next/navigation';
 import update from 'immutability-helper';
-import { isArray, mergeWith, set } from 'lodash';
-import { useAppSelector } from '@/lib/store/hooks';
+import { set } from 'lodash';
+import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { openAuthModal } from '@/lib/store/features/auth-modal/authModalSlice';
 import { updateProfile } from '@/lib/actions/profile';
 import Button from '@/components/button';
@@ -14,7 +15,6 @@ import {
 	getStorageProfile,
 	storeProfileToLocalStorage
 } from '@/lib/utils';
-import { useDispatch } from 'react-redux';
 import Illustration from '../_components/illustration';
 import EditLinkBlock from './editLink';
 import EditDetail from './editDetail';
@@ -33,11 +33,14 @@ export default function ProfileEditBlock({
 }) {
 	const formRef = useRef();
 	const tab = useAppSelector(({ profile }) => profile?.tab);
-	const dispatch = useDispatch();
+	const user = useAppSelector(({ auth }) => auth?.user);
+	const profileId = user?.profileId;
+	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const [profile, setProfile] = useState(_profile);
 
-	const { links, profileId, firstName, lastName, email, avatarUrl } = profile;
+	const { links, firstName, lastName, email, avatarUrl } = profile;
 
 	const [state, formAction] = useFormState(
 		updateProfile.bind(null, profileId),
@@ -45,24 +48,16 @@ export default function ProfileEditBlock({
 	);
 
 	useEffect(() => {
+		if (profileId) {
+			router.push(`/profile/${profileId}`);
+		}
+	}, [profileId, router]);
+
+	useEffect(() => {
 		const storageProfile = getStorageProfile();
 
-		if (storageProfile) {
-			const newProfile = mergeWith(
-				_profile,
-				storageProfile,
-				(objVal, srcVal) => {
-					if (isArray(objVal)) {
-						return objVal.concat(srcVal);
-					}
-
-					return objVal || srcVal;
-				}
-			);
-
-			setProfile({ ...newProfile });
-		}
-	}, []);
+		setProfile(() => update(storageProfile, { $merge: _profile }));
+	}, [_profile]);
 
 	useEffect(() => {
 		if (state?.message) {

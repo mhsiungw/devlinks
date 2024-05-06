@@ -67,7 +67,7 @@ export default function Select({
 				<ol className='divide-y divide-border'>
 					{options.map(({ Icon, label, value }) => (
 						<li
-							className='hover:bg-grey flex items-center gap-3 p-3'
+							className='hover:bg-grey hover:text-light-purple flex items-center gap-3 p-3'
 							key={value}
 							onClick={() => {
 								setInternalValue(value);
