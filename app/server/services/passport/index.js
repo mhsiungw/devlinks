@@ -6,7 +6,11 @@ export default app => {
 
 	passport.serializeUser((user, cb) => {
 		process.nextTick(() => {
-			cb(null, { id: user.id, email: user.email });
+			cb(null, {
+				id: user.id,
+				email: user.email,
+				profileId: user.profileId
+			});
 		});
 	});
 

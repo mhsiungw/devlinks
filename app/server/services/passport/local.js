@@ -9,7 +9,12 @@ export default new LocalStrategy(
 	async (email, password, cb) => {
 		try {
 			const { rows } = await db.query(
-				'SELECT user_id "userId", password FROM users WHERE email = $1',
+				`
+					SELECT users.user_id "userId", password, profile_id "profileId"
+					FROM users
+					INNER JOIN profiles ON users.user_id = profiles.user_id
+					WHERE users.email = $1;
+				`,
 				[email]
 			);
 
@@ -19,10 +24,10 @@ export default new LocalStrategy(
 				});
 			}
 
-			const { userId, password: hashPassword } = rows[0];
+			const { userId, password: hashPassword, profileId } = rows[0];
 
 			if (await bcrypt.compare(password, hashPassword)) {
-				cb(null, { id: userId, email });
+				cb(null, { id: userId, email, profileId });
 			} else {
 				cb(null, false, {
 					message: 'Incorrect username or password.'

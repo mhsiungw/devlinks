@@ -39,6 +39,14 @@ router.post(
 		})
 );
 
+router.get('/login/pin', async (req, res) => {
+	res.json({
+		error: false,
+		message: 'ok',
+		data: { isAuthenticated: req.isAuthenticated(), user: req.user }
+	});
+});
+
 router.get('/logout', (req, res, next) => {
 	req.logout(err => {
 		if (err) {
