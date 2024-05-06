@@ -199,3 +199,20 @@ export function getStorageProfile() {
 
 	return null;
 }
+
+export async function storeProfileToLocalStorage(profile) {
+	const newProfile = {
+		...profile
+	};
+
+	if (profile.avatarFile instanceof File && profile.avatarFile.size !== 0) {
+		const imageBase64 = await getBase64(profile.avatarFile);
+
+		set(newProfile, 'avatarFile', imageBase64);
+		set(newProfile, 'avatarUrl', imageBase64);
+	} else {
+		set(newProfile, 'avatarFile', profile.avatarUrl);
+	}
+
+	localStorage.setItem('profile', JSON.stringify(newProfile));
+}
