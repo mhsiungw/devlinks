@@ -39,11 +39,10 @@ jobs:
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             - name: create env file
               run: |
-                  cd ./app/client
-                  touch .env.production
+                  cd ./app/client && touch .env.production
                   echo NEXT_PUBLIC_MODE=${{ secrets.NEXT_PUBLIC_MODE }} >> .env.production
                   echo NEXT_TELEMETRY_DISABLED=${{ secrets.NEXT_TELEMETRY_DISABLED }} >> .env.production
-                  echo API_URL_FOR_SERVER==${{ secrets.API_URL_FOR_SERVER }} >> .env.production
+                  echo API_URL_FOR_SERVER=${{ secrets.API_URL_FOR_SERVER }} >> .env.production
                   echo NEXT_PUBLIC_API_URL_FOR_CLIENT==${{ secrets.NEXT_PUBLIC_API_URL_FOR_CLIENT }} >> .env.production
                   echo IS_SERVER_FLAG==${{ secrets.IS_SERVER_FLAG }} >> .env.production
                   ls -a
