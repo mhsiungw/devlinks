@@ -43,8 +43,8 @@ jobs:
                   echo NEXT_PUBLIC_MODE=${{ secrets.NEXT_PUBLIC_MODE }} >> .env.production
                   echo NEXT_TELEMETRY_DISABLED=${{ secrets.NEXT_TELEMETRY_DISABLED }} >> .env.production
                   echo API_URL_FOR_SERVER=${{ secrets.API_URL_FOR_SERVER }} >> .env.production
-                  echo NEXT_PUBLIC_API_URL_FOR_CLIENT==${{ secrets.NEXT_PUBLIC_API_URL_FOR_CLIENT }} >> .env.production
-                  echo IS_SERVER_FLAG==${{ secrets.IS_SERVER_FLAG }} >> .env.production
+                  echo NEXT_PUBLIC_API_URL_FOR_CLIENT=${{ secrets.NEXT_PUBLIC_API_URL_FOR_CLIENT }} >> .env.production
+                  echo IS_SERVER_FLAG=${{ secrets.IS_SERVER_FLAG }} >> .env.production
                   ls -a
             # This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.
             # It uses the `context` parameter to define the build's context as the set of files located in the specified path. For more information, see "[Usage](https://github.com/docker/build-push-action#usage)" in the README of the `docker/build-push-action` repository.
