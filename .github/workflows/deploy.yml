@@ -8,6 +8,8 @@ on:
                 'Build and publish the server image'
             ]
         branches: ['release']
+        types:
+            - completed
 jobs:
     build-and-push-image:
         runs-on: ubuntu-latest
