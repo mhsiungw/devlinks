@@ -2,7 +2,11 @@
 name: Deploy to EC2
 on:
     workflow_run:
-        workflows: ['build-client', 'build-server']
+        workflows:
+            [
+                'Build and publish the server image',
+                'Build and publish the server image'
+            ]
         branches: ['release']
 jobs:
     build-and-push-image:
