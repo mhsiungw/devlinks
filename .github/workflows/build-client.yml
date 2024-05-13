@@ -74,9 +74,7 @@ jobs:
               run: |
                   echo ${{ secrets.SSH_PRIVATE_KEY }} > private_key && chmod 600 private_key
                   ssh -o StrictHostKeyChecking=no -i private_key ${{secrets.USER_NAME}}@${{secrets.IP_ADDRESS}} '
-
-                  # Now we have got the access of EC2 and we will start the deploy .
                   cd /var/www &&
-                  echo ${{secrets.PERSONAL_ACCESS_TOKEN}} | docker login ghcr.io -u mhsiungw --password-stdin
+                  echo ${{secrets.PERSONAL_ACCESS_TOKEN}} | docker login ghcr.io -u mhsiungw --password-stdin &&
                   docker-compose up --build
                   '
