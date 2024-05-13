@@ -74,7 +74,5 @@ jobs:
               run: |
                   echo ${{ secrets.SSH_PRIVATE_KEY }} > private_key && chmod 600 private_key
                   ssh -o StrictHostKeyChecking=no -i private_key ${{secrets.USER_NAME}}@${{secrets.IP_ADDRESS}} '
-                  cd /var/www &&
-                  cat private_key | docker login ghcr.io -u mhsiungw --password-stdin &&
-                  sudo docker-compose up --build
+                  ls
                   '
