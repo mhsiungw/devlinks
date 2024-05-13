@@ -71,5 +71,13 @@ jobs:
                   push-to-registry: true
 
             - name: Deploy to EC2
-              run: |
-                  ls
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.IP_ADDRESS }}
+                  username: ${{ secrets.USER_NAME }}
+                  password: ${{ secrets.SSH_PRIVATE_KEY }}
+                  script_stop: true
+                  script: |
+                      cd /var/www
+                      cat personal_access_token | docker login ghcr.io -u mhsiungw --password-stdin
+                      sudo docker-compose up --build -d
