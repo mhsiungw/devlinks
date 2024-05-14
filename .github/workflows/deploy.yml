@@ -1,17 +1,8 @@
 #
 name: Deploy to EC2
-on:
-    workflow_run:
-        workflows:
-            [
-                'Build and publish the server image',
-                'Build and publish the server image'
-            ]
-        branches: ['release']
-        types:
-            - completed
+on: workflow_dispatch
 jobs:
-    build-and-push-image:
+    deployment:
         runs-on: ubuntu-latest
         environment: production
         steps:
