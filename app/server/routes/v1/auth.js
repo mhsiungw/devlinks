@@ -34,7 +34,10 @@ router.post(
 		// Handle error
 		res.status(401).json({
 			error: true,
-			message: req.session.messages[0],
+			message:
+				process.env.mode === 'production'
+					? 'Something went wrong'
+					: req.session.messages[0],
 			data: null
 		})
 );
