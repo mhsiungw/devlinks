@@ -113,7 +113,7 @@ export default function ProfileEditBlock({
 				showToast(null, 'Image is too big!');
 				e.target.value = '';
 				set(newState, e.target.name, null);
-				if (!avatarUrl.includes('s3')) {
+				if (!avatarUrl?.includes('s3')) {
 					set(newState, 'avatarUrl', null);
 				}
 			} else {
