@@ -105,7 +105,7 @@ router.put(
 				throw new Error("You don't own this profile!");
 			}
 
-			const { firstName, lastName, email, links } = req.body;
+			const { firstName, lastName, email, links, avatarFile } = req.body;
 
 			await db.query(
 				`
@@ -120,20 +120,37 @@ router.put(
 				[firstName, lastName, email, links, profileId]
 			);
 
-			if (req.file) {
-				const params = {
+			let params = {
+				Bucket: 'minstack.lol'
+			};
+
+			if (avatarFile && !req.file) {
+				const type = avatarFile.split(';')[0].split('/')[1];
+				const buf = Buffer.from(
+					avatarFile.replace(/^data:image\/\w+;base64,/, ''),
+					'base64'
+				);
+				params = {
+					...params,
+					Body: buf,
+					Key: getImageStorageName(userId, profileId, `.${type}`),
+					ContentType: `image/${type}`,
+					ContentEncoding: 'base64'
+				};
+			} else if (req.file) {
+				params = {
 					Bucket: 'minstack.lol',
 					Key: getImageStorageName(
 						userId,
 						profileId,
 						path.extname(req.file?.originalname)
-					), // Specify the key (name) under which the file will be stored in S3
-					Body: req.file.buffer, // Specify the file data
-					ContentType: `image/${path
-						.extname(req.file.originalname)
-						.replace('.', '')}`
+					),
+					Body: req.file.buffer,
+					ContentType: req.file.mimetype
 				};
+			}
 
+			if (params?.Body) {
 				const avatarUrl = await uploadS3(params);
 
 				await db.query(
@@ -146,8 +163,11 @@ router.put(
 					[avatarUrl, profileId]
 				);
 			}
-
-			res.json({ error: false, message: 'Profile Saved', data: null });
+			res.json({
+				error: false,
+				message: 'Profile Saved',
+				data: null
+			});
 		} catch (err) {
 			next(err);
 		}
