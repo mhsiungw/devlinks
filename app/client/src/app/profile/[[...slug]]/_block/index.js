@@ -51,7 +51,7 @@ export default function ProfileEditBlock({
 					if (Array.isArray(profile[key])) {
 						formData.append(key, JSON.stringify(profile[key]));
 					} else {
-						formData.append(key, profile[key]);
+						formData.append(key, profile[key] || '');
 					}
 
 					return formData;
