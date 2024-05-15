@@ -210,8 +210,6 @@ export async function storeProfileToLocalStorage(profile) {
 
 		set(newProfile, 'avatarFile', imageBase64);
 		set(newProfile, 'avatarUrl', imageBase64);
-	} else {
-		set(newProfile, 'avatarFile', profile.avatarUrl);
 	}
 
 	localStorage.setItem('profile', JSON.stringify(newProfile));

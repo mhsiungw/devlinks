@@ -98,8 +98,10 @@ export default function ProfileEditBlock({
 			if (width > 1024 || height > 1024) {
 				showToast(null, 'Image is too big!');
 				e.target.value = '';
-				set(newState, e.target.name, '');
-				set(newState, 'avatarUrl', '');
+				set(newState, e.target.name, null);
+				if (!avatarUrl.includes('s3')) {
+					set(newState, 'avatarUrl', null);
+				}
 			} else {
 				set(newState, e.target.name, e.target.files[0]);
 				set(
