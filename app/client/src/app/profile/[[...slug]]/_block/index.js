@@ -88,40 +88,29 @@ export default function ProfileEditBlock({
 	}, [state]);
 
 	const handleFormChange = async e => {
+		const newState = { ...profile };
+
 		if (e.target.id === 'avatarFile') {
 			const { width, height } = await getImageDimension(
 				e.target.files[0]
 			);
 
 			if (width > 1024 || height > 1024) {
-				const dt = new DataTransfer();
-
-				if (profile?.avatarFile) {
-					dt.items.add(profile?.avatarFile);
-				}
-
-				e.target.value = '';
-
-				e.target.files = dt.files;
-
 				showToast(null, 'Image is too big!');
-				return;
+				e.target.value = '';
+				set(newState, e.target.name, '');
+				set(newState, 'avatarUrl', '');
+			} else {
+				set(newState, e.target.name, e.target.files[0]);
+				set(
+					newState,
+					'avatarUrl',
+					URL.createObjectURL(e.target.files[0])
+				);
 			}
+		} else {
+			set(newState, e.target.name, e.target.value);
 		}
-
-		const newState = new FormData(formRef.current)
-			.entries()
-			.filter(d => !d[0].includes('$ACTION_'))
-			.reduce((acc, [key, value]) => {
-				if (e.target.id === 'avatarFile' && key === 'avatarFile') {
-					acc.avatarFile = value;
-					acc.avatarUrl = URL.createObjectURL(value);
-				} else {
-					set(acc, key, value);
-				}
-
-				return acc;
-			}, {});
 
 		setProfile(prev =>
 			update(prev, {
