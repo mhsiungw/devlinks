@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import update from 'immutability-helper';
-import { isArray, mergeWith, set } from 'lodash';
+import { cloneDeep, isArray, mergeWith, set } from 'lodash';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { openAuthModal } from '@/lib/store/features/auth-modal/authModalSlice';
 import { updateProfile } from '@/lib/actions/profile';
@@ -69,7 +69,8 @@ export default function ProfileEditBlock({
 	}, [profileId, router]);
 
 	useEffect(() => {
-		const storageProfile = getStorageProfile();		if (storageProfile) {
+		const storageProfile = getStorageProfile();
+		if (storageProfile) {
 			setProfile(() =>
 				update(
 					{},
@@ -101,7 +102,7 @@ export default function ProfileEditBlock({
 	}, [state]);
 
 	const handleFormChange = async e => {
-		const newState = { ...profile };
+		const newState = cloneDeep(profile);
 
 		if (e.target.id === 'avatarFile') {
 			const { width, height } = await getImageDimension(
