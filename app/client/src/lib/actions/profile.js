@@ -1,38 +1,17 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { set } from 'lodash';
 import { getAPIUrl } from '../utils';
 
-export async function updateProfile(profileId, _, formData) {
+export async function updateProfile(profileId, formData) {
 	if (!profileId) {
 		return null;
 	}
 
-	const sanitizedData = Array.from(formData)
-		.filter(d => !d[0].includes('$ACTION_'))
-		.reduce((acc, [key, value]) => {
-			if (value instanceof File && value.size === 0) {
-				return acc;
-			}
-			set(acc, key, value);
-			return acc;
-		}, {});
-
-	const newFormData = new FormData();
-
-	Object.entries(sanitizedData).forEach(([key, value]) => {
-		if (Array.isArray(value)) {
-			newFormData.append(key, JSON.stringify(value));
-		} else {
-			newFormData.append(key, value);
-		}
-	});
-
 	try {
 		const res = await fetch(`${getAPIUrl()}/profile/${[profileId]}`, {
 			method: 'PUT',
-			body: newFormData,
+			body: formData,
 			headers: {
 				Cookie: cookies().toString()
 			}
@@ -44,8 +23,7 @@ export async function updateProfile(profileId, _, formData) {
 	} catch (err) {
 		return {
 			error: true,
-			message: 'Something went wrong',
-			data: newFormData
+			message: 'Something went wrong'
 		};
 	}
 }

@@ -43,7 +43,22 @@ export default function ProfileEditBlock({
 	const { links, firstName, lastName, email, avatarUrl } = profile;
 
 	const [state, formAction] = useFormState(
-		updateProfile.bind(null, profileId),
+		updateProfile.bind(
+			null,
+			profileId,
+			['links', 'firstName', 'lastName', 'email', 'avatarFile'].reduce(
+				(formData, key) => {
+					if (Array.isArray(profile[key])) {
+						formData.append(key, JSON.stringify(profile[key]));
+					} else {
+						formData.append(key, profile[key]);
+					}
+
+					return formData;
+				},
+				new FormData()
+			)
+		),
 		null
 	);
 
@@ -54,15 +69,13 @@ export default function ProfileEditBlock({
 	}, [profileId, router]);
 
 	useEffect(() => {
-		const storageProfile = getStorageProfile();
-
-		if (storageProfile) {
+		const storageProfile = getStorageProfile();		if (storageProfile) {
 			setProfile(() =>
 				update(
 					{},
 					{
 						$merge: mergeWith(
-							_profile,
+							{},
 							storageProfile,
 							(objVal, srcVal) => {
 								if (isArray(objVal) && !objVal.length) {
