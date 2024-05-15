@@ -183,17 +183,6 @@ export function getStorageProfile() {
 		if (!profile) {
 			return null;
 		}
-
-		const blob = dataURLtoBlob(profile.avatarFile);
-
-		if (blob) {
-			set(
-				profile,
-				'avatarFile',
-				new File([blob], 'image', { type: blob.type })
-			);
-		}
-
 		return profile;
 	}
 

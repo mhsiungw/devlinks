@@ -76,7 +76,7 @@ export default function ProfileEditBlock({
 					{},
 					{
 						$merge: mergeWith(
-							{},
+							_profile,
 							storageProfile,
 							(objVal, srcVal) => {
 								if (isArray(objVal) && !objVal.length) {
