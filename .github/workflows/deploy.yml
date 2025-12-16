@@ -15,4 +15,4 @@ jobs:
                   command: |
                       cd /var/www
                       cat personal_access_token | docker login ghcr.io -u mhsiungw --password-stdin
-                      sudo docker-compose stop && sudo docker-compose rm -f && sudo docker-compose pull && sudo docker-compose up --build -d
+                      sudo docker compose stop && sudo docker compose rm -f && sudo docker compose pull && sudo docker compose up --build -d

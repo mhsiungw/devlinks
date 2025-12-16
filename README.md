@@ -22,7 +22,7 @@ npm run dev
 npm run init
 ```
 
-3. Client is hosted on localhost:3001 and server is hosted on 3000
+3. Client is hosted on [localhost:3001](http://localhost:3001) and server is hosted on 3000
 
 ### Built with
 
