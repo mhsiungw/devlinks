@@ -6,7 +6,7 @@ A fully functional link-sharing app
 
 ### Live Site URL
 
-[https://devlinks.minstack.lol](https://devlinks.minstack.lol)
+Previously deployed on AWS; currently paused
 
 ## TO run locally
 
